@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "282077040511",
+    "project_id": "greenspot-d7108",
+    "storage_bucket": "greenspot-d7108.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282077040511:android:a40be61bdc11f5a722d44a",
+        "android_client_info": {
+          "package_name": "com.example.greenspot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282077040511-55ia3pffieenh2ajjsl8ok60go81rq0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgqDJVv-zvkDr6kebj8Uz6EZ1qflq64k8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282077040511-55ia3pffieenh2ajjsl8ok60go81rq0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
