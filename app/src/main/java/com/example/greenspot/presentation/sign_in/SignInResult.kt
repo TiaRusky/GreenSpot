@@ -2,7 +2,7 @@ package com.example.greenspot.presentation.sign_in
 
 
 data class SignInResult(
-    val data: com.example.greenspot.presentation.sign_in.UserData?//Logged User data
+    val data: com.example.greenspot.presentation.sign_in.UserData?,   //Logged User data
     val errorMessage: String?
 )
 
