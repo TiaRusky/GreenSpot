@@ -19,7 +19,7 @@ class SignInViewModel:ViewModel() {
         }
     }
 
-    fun resetStae(){            //Remove the info about the account when logout occours
+    fun resetState(){            //Remove the info about the account when logout occours
         _state.update {
             SignInState()
         }

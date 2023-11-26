@@ -1,6 +1,5 @@
 package com.example.greenspot
 
-import android.content.IntentSender
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -8,9 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
@@ -27,16 +24,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 import com.example.greenspot.presentation.sign_in.SignInViewModel
 import com.example.greenspot.ui.SignInScreen
+import com.example.greenspot.presentation.spotter.SpotterProfileScreen
 import kotlinx.coroutines.launch
-import com.google.android.gms.auth.api.identity.Identity
+
 class MainActivity : ComponentActivity() {
 
+    //Define the google client object to handle spotter's account login/logout
     private val googleAuthClient by lazy{
         GoogleAuthUIClient(
             context = applicationContext,
             oneTapClient = com.google.android.gms.auth.api.identity.Identity.getSignInClient(applicationContext)
         )
     }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -55,6 +56,13 @@ class MainActivity : ComponentActivity() {
                         composable(route = GreenspotScreen.SignIn.name){
                             val viewModel = viewModel<SignInViewModel>()
                             val state by viewModel.state.collectAsState()
+
+                            //Check if the user is already logged in
+                            LaunchedEffect(key1 = Unit){
+                                if(googleAuthClient.getSignedInUser() != null){
+                                    navController.navigate(GreenspotScreen.SpotterProfile.name)
+                                }
+                            }
 
                             val launcher = rememberLauncherForActivityResult(
                                 contract = ActivityResultContracts.StartIntentSenderForResult(),
@@ -77,6 +85,9 @@ class MainActivity : ComponentActivity() {
                                         "SignIn successfully",
                                         Toast.LENGTH_LONG
                                     ).show()
+
+                                    navController.navigate(GreenspotScreen.SpotterProfile.name)
+                                    viewModel.resetState()      //Reset the state about the user when he logout
                                 }
                             }
                             
@@ -94,6 +105,23 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+
+                        composable(route = GreenspotScreen.SpotterProfile.name){
+                            SpotterProfileScreen(
+                                userData = googleAuthClient.getSignedInUser(),
+                                onSignOut = {
+                                    lifecycleScope.launch{
+                                        googleAuthClient.signOut()
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Signed out",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -103,5 +131,6 @@ class MainActivity : ComponentActivity() {
 
 
 enum class GreenspotScreen(){
-    SignIn
+    SignIn,
+    SpotterProfile
 }
