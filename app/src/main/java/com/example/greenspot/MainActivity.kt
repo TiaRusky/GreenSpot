@@ -25,6 +25,9 @@ import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 import com.example.greenspot.presentation.sign_in.SignInViewModel
 import com.example.greenspot.ui.SignInScreen
 import com.example.greenspot.presentation.spotter.SpotterProfileScreen
+import com.google.firebase.Firebase
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -40,6 +43,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             GreenspotTheme {
                 // A surface container using the 'background' color from the theme
@@ -47,6 +51,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
                     val navController: NavHostController = rememberNavController()
 
                     NavHost(

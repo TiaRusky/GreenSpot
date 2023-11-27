@@ -69,6 +69,9 @@ dependencies {
     //Needed for AsyncImage
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+    //Dependencies for database
+    implementation("com.google.firebase:firebase-database:20.3.0")
+
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
