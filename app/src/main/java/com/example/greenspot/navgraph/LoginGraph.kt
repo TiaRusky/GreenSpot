@@ -91,6 +91,7 @@ fun NavGraphBuilder.loginGraph(
         //The main page when a spotter is logged
         composable(route = GreenspotScreen.SpotterProfile.name){
             SpotterProfileScreen(
+                navController = navController,
                 userData = googleAuthClient.getSignedInUser(),
                 onSignOut = {
                     lifecycleScope.launch{

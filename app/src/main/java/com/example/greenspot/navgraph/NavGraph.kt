@@ -25,5 +25,12 @@ fun SetupNavGraph(
             lifecycleScope = lifecycleScope,
             applicationContext = applicationContext
         )
+
+        spotterGraph(
+            navController = navController,
+            googleAuthClient = googleAuthClient,
+            lifecycleScope = lifecycleScope,
+            applicationContext = applicationContext
+        )
     }
 }

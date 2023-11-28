@@ -1,33 +1,30 @@
 package com.example.greenspot.presentation.common
 
 
-
 import androidx.compose.foundation.background
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Icon
+import androidx.compose.material.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.greenspot.navgraph.LoggedSpotterScreens
 
 
 @Composable
 fun GreenspotBottomBar(
-     selectedScreen : String,
-
+    navController : NavHostController,
+    onSignOut: () -> Unit,
+    selectedScreen : String
 ) {
-    /*
+
     val items = listOf(
-        SpotterScreens.MyHome,
-        SpotterScreens.MyReports,
-        SpotterScreens.LogOut
+        LoggedSpotterScreens.MyHome,
+        LoggedSpotterScreens.MyReports,
+        //LoggedSpotterScreens.LogOut
     )
 
     BottomNavigation (
@@ -36,34 +33,38 @@ fun GreenspotBottomBar(
         items.forEach { item->
             BottomNavigationItem(
                 selected = item.title == selectedScreen,
-                onClick = {  },
+                onClick = {
+                          navController.navigate(item.route)
+                    /*TODO AVOID THE FILLING OF THE SCREEN STACK*/
+                },
 
                 icon = {
                     Icon(imageVector = item.icon, contentDescription = item.title)
                 }
             )
         }
+
+        BottomNavigationItem(
+            selected = false,
+            onClick = { onSignOut() },
+            icon = {
+                Icon(imageVector = LoggedSpotterScreens.LogOut.icon,contentDescription = LoggedSpotterScreens.LogOut.title)
+            }
+        )
     }
-    */
+
 
 }
 
-//A sealed class is used can have a set of limited objects, only defined at compiling time
-//Class to describe the possibile screen of the menu
-sealed class SpotterScreens(
-    val title: String,
-    val route: String,
-    val icon : ImageVector
-) {
-    object MyHome : SpotterScreens("My Profile", "mySpotterProfile", Icons.Default.Home)
-    object LogOut : SpotterScreens("LogOut", "logout", Icons.Default.ExitToApp)
-    object MyReports : SpotterScreens("My Reports", "myReports", Icons.Default.Info)
-    /*TO DO*/
-}
+
 @Preview
 @Composable
 fun GreenspotBottomBarPreview() {
-    GreenspotBottomBar(selectedScreen = SpotterScreens.MyHome.title)
+    GreenspotBottomBar(
+        navController = rememberNavController(),
+        selectedScreen = LoggedSpotterScreens.MyHome.title,
+        onSignOut = {}
+    )
 }
 
 

@@ -9,18 +9,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.greenspot.navgraph.LoggedSpotterScreens
 import com.example.greenspot.presentation.common.GreenspotBottomBar
-import com.example.greenspot.presentation.common.SpotterScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SpotterReports(
-    changeScreen : (String) -> Unit
-){
+    navController: NavHostController,
+    onSignOut: () -> Unit
+) {
 
     Scaffold(
         bottomBar = {
-            GreenspotBottomBar(selectedScreen = SpotterScreens.MyReports.title)
+            GreenspotBottomBar(
+                navController = navController,
+                selectedScreen = LoggedSpotterScreens.MyReports.title,
+                onSignOut = onSignOut
+            )
         },
 
         modifier = Modifier
@@ -30,8 +37,8 @@ fun SpotterReports(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-        ){
-            item{
+        ) {
+            item {
                 Text(text = "AAAAA")
             }
         }
@@ -40,6 +47,9 @@ fun SpotterReports(
 
 @Preview
 @Composable
-fun SpotterReportsPreview(){
-    SpotterReports({})
+fun SpotterReportsPreview() {
+    SpotterReports(
+        navController = rememberNavController(),
+        onSignOut = {}
+    )
 }
