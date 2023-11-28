@@ -69,6 +69,8 @@ dependencies {
     //Needed for AsyncImage
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+    //BottomNav
+    implementation("androidx.compose.material:material:1.4.2")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
