@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.greenspot.WELCOME
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 
 @Composable
@@ -17,7 +16,8 @@ fun SetupNavGraph(
 ){
     NavHost(
         navController = navController,
-        startDestination = WELCOME
+        startDestination = WELCOME,
+        route = ROOT
     ){
         loginGraph(
             navController = navController,

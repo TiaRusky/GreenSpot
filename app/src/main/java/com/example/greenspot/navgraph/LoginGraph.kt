@@ -15,8 +15,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.greenspot.GreenspotScreen
-import com.example.greenspot.WELCOME
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 import com.example.greenspot.presentation.sign_in.SignInViewModel
 import com.example.greenspot.presentation.spotter.SpotterProfileScreen

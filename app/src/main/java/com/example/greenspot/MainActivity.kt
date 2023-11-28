@@ -75,9 +75,3 @@ class MainActivity : ComponentActivity() {
 }
 
 
-enum class GreenspotScreen(){
-    SignIn,
-    SpotterProfile
-}
-
-const val WELCOME = "welcome"
