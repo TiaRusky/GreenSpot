@@ -36,6 +36,7 @@ fun GreenspotBottomBar(
                 onClick = {
                           navController.navigate(item.route)
                     /*TODO AVOID THE FILLING OF THE SCREEN STACK*/
+                    //Si potrebbe continuare ad usare poputo
                 },
 
                 icon = {
@@ -66,6 +67,3 @@ fun GreenspotBottomBarPreview() {
         onSignOut = {}
     )
 }
-
-
-
