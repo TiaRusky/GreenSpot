@@ -1,15 +1,10 @@
 package com.example.greenspot.presentation.common
 
-
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,7 +36,7 @@ fun GreenspotBottomBar(
     )
 
     BottomNavigation (
-        backgroundColor = Color.White //BottomNavigation color
+        backgroundColor = MaterialTheme.colorScheme.primary     //BottomNavigation color
     ){
         items.forEach { item->
             BottomNavigationItem(
