@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.navgraph.LoggedSpotterScreens
@@ -24,27 +25,36 @@ import com.example.greenspot.navgraph.LoggedSpotterScreens
 
 @Composable
 fun GreenspotBottomBar(
-    navController : NavHostController,
+    navController: NavHostController,
     onSignOut: () -> Unit,
-    selectedScreen : String
+    selectedScreen: String
 ) {
 
+    //List of items that will compose the bottomNavigationBar
     val items = listOf(
         LoggedSpotterScreens.MyHome,
         LoggedSpotterScreens.MyReports,
         //LoggedSpotterScreens.LogOut
     )
 
-    BottomNavigation (
+    BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.primary     //BottomNavigation color
-    ){
-        items.forEach { item->
+    ) {
+        items.forEach { item ->
             BottomNavigationItem(
                 selected = item.title == selectedScreen,
                 onClick = {
-                          navController.navigate(item.route)
-                    /*TODO AVOID THE FILLING OF THE SCREEN STACK*/
-                    //Si potrebbe continuare ad usare poputo
+                    //Start the navigation only if the destination screen != starting screen
+                    if (item.title != selectedScreen) {
+                        navController.navigate(item.route) {
+                            //Clear the stack screen to keep the app light
+                            popUpTo(navController.graph.findStartDestination().id) {
+                            }
+                            //Avoid multiple copy of destinations when selecting the same item
+                            //So, there will be at most one copy of a given destination on the top of the back stack
+                            launchSingleTop = true
+                        }
+                    }
                 },
 
                 icon = {
@@ -55,7 +65,7 @@ fun GreenspotBottomBar(
                         Icon(
                             imageVector = item.icon,
                             contentDescription = item.title,
-                            tint = if (item.title == selectedScreen) {
+                            tint = if (item.title == selectedScreen) {  //Make visible the current page in the appbar
                                 Color.Black
                             } else {
                                 Color.Gray
@@ -64,7 +74,7 @@ fun GreenspotBottomBar(
                         )
                         Text(
                             text = item.title,
-                            color = if (item.title == selectedScreen){
+                            color = if (item.title == selectedScreen) {
                                 Color.Black
                             } else {
                                 Color.Gray
