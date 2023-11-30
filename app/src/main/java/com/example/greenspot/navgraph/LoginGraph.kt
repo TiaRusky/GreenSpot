@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -38,7 +39,13 @@ fun NavGraphBuilder.loginGraph(
             //Check if the user is already logged in
             LaunchedEffect(key1 = Unit){
                 if(googleAuthClient.getSignedInUser() != null){
-                    navController.navigate(GreenspotScreen.SpotterProfile.name)
+                    navController.navigate(GreenspotScreen.SpotterProfile.name){
+
+                        //Once logged in the system, remove the login screen from the stack
+                        popUpTo(navController.graph.findStartDestination().id){
+                            inclusive = true
+                        }
+                    }
                 }
             }
 

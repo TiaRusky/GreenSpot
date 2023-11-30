@@ -70,11 +70,12 @@ private fun signOut(
             Toast.LENGTH_LONG
         ).show()
     }.invokeOnCompletion {
-        //navController.popBackStack()
         navController.navigate(GreenspotScreen.SignIn.name){//Once logged out return to login screen
             popUpTo(GreenspotScreen.SignIn.name){//Clear the screen stack to lighten the app
-                inclusive = false   //Pop until login page (excluded)
+                inclusive = true
             }
+            //Clear the state of Logged Composable
+            restoreState = true
         }
     }
 }
