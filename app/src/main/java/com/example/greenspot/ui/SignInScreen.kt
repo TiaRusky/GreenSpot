@@ -1,7 +1,9 @@
 package com.example.greenspot.ui
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -34,14 +36,18 @@ fun SignInScreen(
         }
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        contentAlignment = Alignment.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ){
         Button(onClick = onSignInClick) {
             Text(text = "Sign in with Google")
+        }
+        Button(onClick = onSignInClick) {
+            Text(text = "Sign in Cleaners")
         }
     }
 }
