@@ -16,6 +16,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.greenspot.cleaner.LoginCleanerScreen
+import com.example.greenspot.cleaner.SignUpCleanerScreen
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 import com.example.greenspot.presentation.sign_in.SignInViewModel
 import com.example.greenspot.presentation.spotter.SpotterProfileScreen
@@ -49,7 +51,6 @@ fun NavGraphBuilder.loginGraph(
                 }
             }
 
-
             //The function to verify that the login gone well
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartIntentSenderForResult(),
@@ -81,6 +82,7 @@ fun NavGraphBuilder.loginGraph(
 
             SignInScreen(
                 state = state,
+                navController = navController,
                 onSignInClick =  {
                     lifecycleScope.launch {
                         val signInIntentSender = googleAuthClient.signIn()
@@ -112,6 +114,20 @@ fun NavGraphBuilder.loginGraph(
                         navController.popBackStack()
                     }
                 }
+            )
+        }
+
+        //Render the login page for cleaner
+        composable(route = GreenspotScreen.SignInCleaner.name){
+            LoginCleanerScreen(
+                navController = navController
+            )
+        }
+
+        //Render the registration page for cleaner
+        composable(route = GreenspotScreen.SignUpCleaner.name){
+            SignUpCleanerScreen(
+                navController = navController
             )
         }
     }

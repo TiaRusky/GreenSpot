@@ -236,7 +236,7 @@ fun DividerTextComponent() {
 }
 
 @Composable
-fun ClickableLoginTextComponent(tryToLogin:Boolean = true, onTextSelected: (String) -> Unit) {
+fun ClickableLoginTextComponent(tryToLogin:Boolean = true, onTextSelected: () -> Unit) {
     val initialText = if(tryToLogin) {
         "Already have an account? "
     } else {
@@ -266,17 +266,8 @@ fun ClickableLoginTextComponent(tryToLogin:Boolean = true, onTextSelected: (Stri
             textAlign = TextAlign.Center
         ),
         text = annotatedString,
-        onClick = { offset ->
-
-            annotatedString.getStringAnnotations(offset, offset)
-                .firstOrNull()?.also { span ->
-                    Log.d("ClickableTextComponent", "{${span.item}}")
-
-                    if (span.item == loginText) {
-                        onTextSelected(span.item)
-                    }
-                }
-
+        onClick = {
+            onTextSelected()
         },
     )
 }

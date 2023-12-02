@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.greenspot.navgraph.GreenspotScreen
 import com.example.greenspot.presentation.sign_in.SignInState
 
@@ -21,6 +22,7 @@ import com.example.greenspot.presentation.sign_in.SignInState
 fun SignInScreen(
     state: SignInState,
     onSignInClick: () -> Unit,
+    navController : NavHostController,
     modifier : Modifier = Modifier
 ){
     val context = LocalContext.current
@@ -47,7 +49,11 @@ fun SignInScreen(
         Button(onClick = onSignInClick) {
             Text(text = "Sign in with Google")
         }
-        Button(onClick = onSignInClick){//button for cleaners login
+        Button(onClick = {
+            //Move to the login cleaner screen
+            navController.navigate(GreenspotScreen.SignInCleaner.name)
+        }
+        ){//button for cleaners login
             Text(text = "Sign in Cleaners")
         }
     }

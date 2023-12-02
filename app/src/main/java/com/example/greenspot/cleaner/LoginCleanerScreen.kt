@@ -19,10 +19,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.R
+import com.example.greenspot.navgraph.GreenspotScreen
 
 @Composable
-fun LoginCleanerScreen() {
+fun LoginCleanerScreen(
+    navController: NavHostController
+) {
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -72,8 +78,13 @@ fun LoginCleanerScreen() {
             )
             ButtonComponent(value = "Login")
             DividerTextComponent()
-            ClickableLoginTextComponent(tryToLogin = false, onTextSelected = {
 
+            //Register (as cleaner)  link
+            ClickableLoginTextComponent(tryToLogin = false, onTextSelected = {
+                navController.navigate(GreenspotScreen.SignUpCleaner.name){
+                    //Remove the login screen to move to the registration screen
+                    popUpTo(navController.graph.findStartDestination().id)
+                }
             })
         }
     }
@@ -82,5 +93,7 @@ fun LoginCleanerScreen() {
 @Preview
 @Composable
 fun DefaultPreviewOfLoginCleanerScreen(){
-    LoginCleanerScreen()
+    LoginCleanerScreen(
+        navController = rememberNavController()
+    )
 }

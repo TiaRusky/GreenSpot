@@ -9,6 +9,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class GreenspotScreen(){
     SignIn,
+    SignInCleaner,
+    SignUpCleaner,
     SpotterProfile
 }
 

@@ -17,10 +17,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.R
+import com.example.greenspot.navgraph.GreenspotScreen
 
 @Composable
-fun SignUpCleanerScreen() {
+fun SignUpCleanerScreen(
+    navController: NavHostController
+) {
 
     Surface (
         modifier = Modifier
@@ -73,7 +80,9 @@ fun SignUpCleanerScreen() {
             )
             DividerTextComponent()
             ClickableLoginTextComponent(tryToLogin = true, onTextSelected = {
-
+                navController.navigate(GreenspotScreen.SignInCleaner.name){
+                    popUpTo(navController.graph.findStartDestination().id)
+                }
             })
         }
 
@@ -84,5 +93,7 @@ fun SignUpCleanerScreen() {
 @Preview
 @Composable
 fun DefaultPreviewOfSignUpCleanerScreen(){
-    SignUpCleanerScreen()
+    SignUpCleanerScreen(
+        navController = rememberNavController()
+    )
 }
