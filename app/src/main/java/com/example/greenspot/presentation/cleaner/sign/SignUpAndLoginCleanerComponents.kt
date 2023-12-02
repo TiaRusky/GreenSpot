@@ -1,4 +1,4 @@
-package com.example.greenspot.cleaner
+package com.example.greenspot.presentation.cleaner.sign
 
 import android.util.Log
 import androidx.compose.foundation.background

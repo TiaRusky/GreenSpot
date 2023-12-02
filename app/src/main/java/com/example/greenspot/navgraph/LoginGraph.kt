@@ -16,8 +16,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.greenspot.cleaner.LoginCleanerScreen
-import com.example.greenspot.cleaner.SignUpCleanerScreen
+import com.example.greenspot.presentation.cleaner.sign.LoginCleanerScreen
+import com.example.greenspot.presentation.cleaner.sign.SignUpCleanerScreen
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 import com.example.greenspot.presentation.sign_in.SignInViewModel
 import com.example.greenspot.presentation.spotter.SpotterProfileScreen
