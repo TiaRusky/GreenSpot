@@ -83,8 +83,13 @@ fun HeadingTextComponent(value:String) {
 }
 
 //composable to create fields to insert something about signup
+//onTextSelected --> whenever the text is changed, we will just pass a string as a callback inside our screen
 @Composable
-fun MyTextFieldComponent(labelValue: String, painterResource: Painter) {
+fun MyTextFieldComponent(labelValue: String,
+                         painterResource: Painter,
+                         onTextChanged: (String) -> Unit,
+                         errorStatus: Boolean = false
+) {
 
     val textValue = remember { //used to remember the last value inserted in the field
         mutableStateOf("")
@@ -102,17 +107,23 @@ fun MyTextFieldComponent(labelValue: String, painterResource: Painter) {
         ),
         keyboardOptions = KeyboardOptions.Default,
         value = textValue.value,
-        onValueChange = { //used when the value change
+        onValueChange = { //used when user insert a name in the field
             textValue.value = it
+            onTextChanged(it)
         },
         leadingIcon = { //used to insert the icons
             Icon(painter = painterResource, contentDescription = "")
-        }
+        },
+        isError = !errorStatus //if there is an error in validation, errorStatus is false and isError became true
     )
 }
 
 @Composable
-fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
+fun PasswordTextFieldComponent(labelValue: String,
+                               painterResource: Painter,
+                               onTextSelected: (String) -> Unit,
+                               errorStatus: Boolean = false
+) {
 
     val password = remember { //used to remember the last value inserted in the field
         mutableStateOf("")
@@ -136,6 +147,7 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
         value = password.value,
         onValueChange = { //used when the value change
             password.value = it
+            onTextSelected(it)
         },
         leadingIcon = { //used to insert the icons
             Icon(painter = painterResource, contentDescription = "")
@@ -167,21 +179,28 @@ fun PasswordTextFieldComponent(labelValue: String, painterResource: Painter) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
-        }
+        },
+        isError = !errorStatus //if there is an error in validation, errorStatus is false and isError became true
     )
 }
 
 //used for the button register and login
 @Composable
-fun ButtonComponent(value: String) {
+fun ButtonComponent(value: String,
+                    onButtonClicked : () -> Unit,
+                    isEnabled : Boolean = false
+) {
     Button(
-        onClick = { },
+        onClick = {
+            onButtonClicked.invoke()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
-        shape = RoundedCornerShape(50.dp)
+        shape = RoundedCornerShape(50.dp),
+        enabled = isEnabled //used to enabled the register button when all the fields are valid
     ){
         Box(
             modifier = Modifier
