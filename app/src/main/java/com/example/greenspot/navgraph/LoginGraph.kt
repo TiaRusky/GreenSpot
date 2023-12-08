@@ -120,14 +120,16 @@ fun NavGraphBuilder.loginGraph(
         //Render the login page for cleaner
         composable(route = GreenspotScreen.SignInCleaner.name){
             LoginCleanerScreen(
-                navController = navController
+                navController = navController,
+                applicationContext = applicationContext
             )
         }
 
         //Render the registration page for cleaner
         composable(route = GreenspotScreen.SignUpCleaner.name){
             SignUpCleanerScreen(
-                navController = navController
+                navController = navController,
+                applicationContext = applicationContext
             )
         }
     }

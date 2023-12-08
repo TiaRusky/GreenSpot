@@ -1,5 +1,7 @@
 package com.example.greenspot.presentation.cleaner.sign
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -11,7 +13,7 @@ class SignupCleanerViewModel : ViewModel() {
     var allValidationsPassed = mutableStateOf(false) //used to check all the validation
     var signUpInProgress = mutableStateOf(false) //used to see the circular progress bar
 
-    fun onEvent(event:SignupCleanerUIEvent) { //used when user perform any event inside the signup screen
+    fun onEvent(event: SignupCleanerUIEvent, applicationContext: Context) { //used when user perform any event inside the signup screen
 
         validateDataWithRules() // if a user insert the valid value, immediately update the field
 
@@ -40,14 +42,14 @@ class SignupCleanerViewModel : ViewModel() {
 
             //When the button is clicked we add some logic to validate the previous fields
             is SignupCleanerUIEvent.RegisterButtonClicked -> {
-                signUp()
+                signUp(applicationContext)
             }
         }
     }
 
     //function used to create user in firebase database
-    private fun signUp() {
-        createUserInFirebase(email = registrationCleanerUIState.value.email, password = registrationCleanerUIState.value.password)
+    private fun signUp(applicationContext: Context) {
+        createUserInFirebase(email = registrationCleanerUIState.value.email, password = registrationCleanerUIState.value.password, applicationContext = applicationContext)
     }
 
     //function to call the validator and validate the strings that user insert in the signup screen
@@ -80,7 +82,7 @@ class SignupCleanerViewModel : ViewModel() {
     }
 
     //Insert user in firebase database
-    private fun createUserInFirebase(email:String, password:String) {
+    private fun createUserInFirebase(email: String, password: String, applicationContext: Context) {
 
         signUpInProgress.value = true //when click on register, we see the circular progress indicator
         FirebaseAuth
@@ -88,16 +90,27 @@ class SignupCleanerViewModel : ViewModel() {
             .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { // callback method that if everything is completed we will just add the user
 
-                signUpInProgress.value = false
-                //se va a buon fine devo far andare l'utente alla login page e mostrare il popup "signUp successfully"
+                if(it.isSuccessful) {
+                    signUpInProgress.value = false
+                    Toast.makeText(
+                        applicationContext,
+                        "SignUp Successful",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
             }
             .addOnFailureListener { //function for the error
-
+                Toast.makeText(
+                    applicationContext,
+                    "SignUp Error",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 
     //Logout function
-    private fun logout() { //inserire questa funzione nella homepage del cleaner
+    private fun logout(applicationContext: Context) { //inserire questa funzione nella homepage del cleaner
         val firebaseAuth = FirebaseAuth.getInstance()
 
         firebaseAuth.signOut()
@@ -105,6 +118,11 @@ class SignupCleanerViewModel : ViewModel() {
         val authStateListener = AuthStateListener {//inside this we are getting firebase authentication
 
             if(it.currentUser == null) { //this means that signOut is successful
+                Toast.makeText(
+                    applicationContext,
+                    "Signed out",
+                    Toast.LENGTH_LONG
+                ).show()
                 //se va a buon fine devo far andare l'utente alla login page
             }
         }

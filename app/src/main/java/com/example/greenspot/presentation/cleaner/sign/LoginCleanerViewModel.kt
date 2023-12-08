@@ -1,5 +1,7 @@
 package com.example.greenspot.presentation.cleaner.sign
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -10,7 +12,7 @@ class LoginCleanerViewModel : ViewModel() {
     var allValidationsPassed = mutableStateOf(false) //used to check all the validation
     var loginInProgress = mutableStateOf(false) //used to see the circular progress bar
 
-    fun onEvent(event:LoginCleanerUIEvent) {
+    fun onEvent(event:LoginCleanerUIEvent, applicationContext: Context) {
 
         when(event) {
 
@@ -27,7 +29,7 @@ class LoginCleanerViewModel : ViewModel() {
             }
 
             is LoginCleanerUIEvent.LoginButtonClicked -> {
-                login()
+                login(applicationContext)
             }
         }
         validateLoginDataWithRules()
@@ -54,7 +56,7 @@ class LoginCleanerViewModel : ViewModel() {
     }
 
     //Login function
-    private fun login() {
+    private fun login(applicationContext: Context) {
 
         loginInProgress.value = true
         val email = loginCleanerUIState.value.email
@@ -65,12 +67,24 @@ class LoginCleanerViewModel : ViewModel() {
             .signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { // callback method that if everything is completed we will access to the homepage
 
-                loginInProgress.value = false
-                //se va a buon fine devo far andare l'utente alla login page e mostrare il popup "signUp successfully"
+                if(it.isSuccessful) {
+                    loginInProgress.value = false
+                    Toast.makeText(
+                        applicationContext,
+                        "SignIn Successful",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    //se va a buon fine devo far andare l'utente alla login page
+                }
+
             }
             .addOnFailureListener {
-                //ERROR
                 loginInProgress.value = false //if the user insert a wrong value, the progress indicator has to hide
+                Toast.makeText(
+                    applicationContext,
+                    "SignIn Error",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 

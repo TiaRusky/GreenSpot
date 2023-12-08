@@ -1,5 +1,6 @@
 package com.example.greenspot.presentation.cleaner.sign
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import com.example.greenspot.navgraph.GreenspotScreen
 @Composable
 fun SignUpCleanerScreen(
     navController: NavHostController,
+    applicationContext: Context,
     signupCleanerViewModel: SignupCleanerViewModel = viewModel()
 ) {
     Box(
@@ -72,7 +74,7 @@ fun SignUpCleanerScreen(
                     labelValue = "Cleaner company name",
                     painterResource = painterResource(id = R.drawable.profile),
                     onTextChanged = {
-                        signupCleanerViewModel.onEvent(SignupCleanerUIEvent.CompanyNameChanged(it))
+                        signupCleanerViewModel.onEvent(SignupCleanerUIEvent.CompanyNameChanged(it), applicationContext = applicationContext)
                     },
                     errorStatus = signupCleanerViewModel.registrationCleanerUIState.value.companyNameError //if there is any in company name, we update it in the composable
                 )
@@ -82,7 +84,7 @@ fun SignUpCleanerScreen(
                     labelValue = "Email",
                     painterResource = painterResource(id = R.drawable.message),
                     onTextChanged = {
-                        signupCleanerViewModel.onEvent(SignupCleanerUIEvent.EmailChanged(it))
+                        signupCleanerViewModel.onEvent(SignupCleanerUIEvent.EmailChanged(it), applicationContext = applicationContext)
                     },
                     errorStatus = signupCleanerViewModel.registrationCleanerUIState.value.emailError //if there is any in email, we update it in the composable
                 )
@@ -92,7 +94,7 @@ fun SignUpCleanerScreen(
                     labelValue = "Password",
                     painterResource = painterResource(id = R.drawable.ic_lock),
                     onTextSelected = {
-                        signupCleanerViewModel.onEvent(SignupCleanerUIEvent.PasswordChanged(it))
+                        signupCleanerViewModel.onEvent(SignupCleanerUIEvent.PasswordChanged(it), applicationContext = applicationContext)
                     },
                     errorStatus = signupCleanerViewModel.registrationCleanerUIState.value.passwordError //if there is any in password, we update it in the composable
                 )
@@ -106,7 +108,7 @@ fun SignUpCleanerScreen(
                 ButtonComponent(
                     value = "Register",
                     onButtonClicked = {
-                        signupCleanerViewModel.onEvent(SignupCleanerUIEvent.RegisterButtonClicked) //used as a callback after the user inserts the data
+                        signupCleanerViewModel.onEvent(SignupCleanerUIEvent.RegisterButtonClicked, applicationContext = applicationContext) //used as a callback after the user inserts the data
                     },
                     isEnabled = signupCleanerViewModel.allValidationsPassed.value //if isEnabled is true then the register button is enabled
                 )
@@ -129,10 +131,10 @@ fun SignUpCleanerScreen(
 
 }
 
-@Preview
+/*@Preview
 @Composable
 fun DefaultPreviewOfSignUpCleanerScreen(){
     SignUpCleanerScreen(
         navController = rememberNavController()
     )
-}
+}*/

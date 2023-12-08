@@ -1,5 +1,6 @@
 package com.example.greenspot.presentation.cleaner.sign
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import com.example.greenspot.navgraph.GreenspotScreen
 @Composable
 fun LoginCleanerScreen(
     loginCleanerViewModel: LoginCleanerViewModel = viewModel(),
+    applicationContext: Context,
     navController: NavHostController
 ) {
     Box(
@@ -71,7 +73,7 @@ fun LoginCleanerScreen(
                     labelValue = "Email",
                     painterResource = painterResource(id = R.drawable.message),
                     onTextChanged = {
-                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.EmailChanged(it))
+                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.EmailChanged(it), applicationContext = applicationContext)
                     },
                     errorStatus = loginCleanerViewModel.loginCleanerUIState.value.emailError
                 )
@@ -81,7 +83,7 @@ fun LoginCleanerScreen(
                     labelValue = "Password",
                     painterResource = painterResource(id = R.drawable.ic_lock),
                     onTextSelected = {
-                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.PasswordChanged(it))
+                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.PasswordChanged(it), applicationContext = applicationContext)
                     },
                     errorStatus = loginCleanerViewModel.loginCleanerUIState.value.passwordError
                 )
@@ -102,7 +104,7 @@ fun LoginCleanerScreen(
                 ButtonComponent(
                     value = "Login",
                     onButtonClicked = {
-                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.LoginButtonClicked) //used as a callback after the user inserts the data
+                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.LoginButtonClicked, applicationContext = applicationContext) //used as a callback after the user inserts the data
                     },
                     isEnabled = loginCleanerViewModel.allValidationsPassed.value //if isEnabled is true then the register button is enabled
                 )
@@ -126,10 +128,10 @@ fun LoginCleanerScreen(
 
 }
 
-@Preview
+/*@Preview
 @Composable
 fun DefaultPreviewOfLoginCleanerScreen(){
     LoginCleanerScreen(
         navController = rememberNavController()
     )
-}
+}*/
