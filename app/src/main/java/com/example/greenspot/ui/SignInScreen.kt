@@ -18,8 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.greenspot.R
 import com.example.greenspot.navgraph.GreenspotScreen
 import com.example.greenspot.presentation.sign_in.SignInState
 
@@ -65,7 +67,11 @@ fun SignInScreen(
             )
             
             //button for the Sign in with google
-            ButtonComponent(onClick = onSignInClick, value = "Sign in with Google")
+            ButtonComponent(
+                onClick = onSignInClick,
+                value = "Sign In with Google",
+                painterResource = painterResource(id = R.drawable.ic_google_logo)
+            )
 
             Spacer(
                 modifier = Modifier
@@ -76,7 +82,8 @@ fun SignInScreen(
             ButtonComponent(onClick = {
                 //Move to the login cleaner screen
                 navController.navigate(GreenspotScreen.SignInCleaner.name) },
-                value = "Sign in Cleaners"
+                value = "Sign in Cleaners",
+                painterResource = painterResource(id = R.drawable.ic_account_circle)
             )
         }
     }
