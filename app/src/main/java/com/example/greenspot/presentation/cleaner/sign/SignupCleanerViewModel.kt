@@ -4,6 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
+import com.example.greenspot.navgraph.GreenspotScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 
@@ -13,7 +15,7 @@ class SignupCleanerViewModel : ViewModel() {
     var allValidationsPassed = mutableStateOf(false) //used to check all the validation
     var signUpInProgress = mutableStateOf(false) //used to see the circular progress bar
 
-    fun onEvent(event: SignupCleanerUIEvent, applicationContext: Context) { //used when user perform any event inside the signup screen
+    fun onEvent(event: SignupCleanerUIEvent, applicationContext: Context, navController: NavHostController) { //used when user perform any event inside the signup screen
 
         validateDataWithRules() // if a user insert the valid value, immediately update the field
 
@@ -42,14 +44,14 @@ class SignupCleanerViewModel : ViewModel() {
 
             //When the button is clicked we add some logic to validate the previous fields
             is SignupCleanerUIEvent.RegisterButtonClicked -> {
-                signUp(applicationContext)
+                signUp(applicationContext, navController = navController)
             }
         }
     }
 
     //function used to create user in firebase database
-    private fun signUp(applicationContext: Context) {
-        createUserInFirebase(email = registrationCleanerUIState.value.email, password = registrationCleanerUIState.value.password, applicationContext = applicationContext)
+    private fun signUp(applicationContext: Context, navController: NavHostController) {
+        createUserInFirebase(email = registrationCleanerUIState.value.email, password = registrationCleanerUIState.value.password, applicationContext = applicationContext, navController = navController)
     }
 
     //function to call the validator and validate the strings that user insert in the signup screen
@@ -82,7 +84,7 @@ class SignupCleanerViewModel : ViewModel() {
     }
 
     //Insert user in firebase database
-    private fun createUserInFirebase(email: String, password: String, applicationContext: Context) {
+    private fun createUserInFirebase(email: String, password: String, applicationContext: Context, navController: NavHostController) {
 
         signUpInProgress.value = true //when click on register, we see the circular progress indicator
         FirebaseAuth
@@ -97,6 +99,7 @@ class SignupCleanerViewModel : ViewModel() {
                         "SignUp Successful",
                         Toast.LENGTH_LONG
                     ).show()
+                    navController.navigate(GreenspotScreen.CleanerProfile.name)
                 }
 
             }

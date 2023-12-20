@@ -69,7 +69,7 @@ fun SignInScreen(
             //button for the Sign in with google
             ButtonComponent(
                 onClick = onSignInClick,
-                value = "Sign In with Google",
+                value = "Sign in with Google",
                 painterResource = painterResource(id = R.drawable.ic_google_logo)
             )
 

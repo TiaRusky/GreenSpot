@@ -11,6 +11,7 @@ enum class GreenspotScreen(){
     SignIn,
     SignInCleaner,
     SignUpCleaner,
+    CleanerProfile,
     SpotterProfile
 }
 
@@ -29,4 +30,13 @@ sealed class LoggedSpotterScreens(
     object LogOut : LoggedSpotterScreens("LogOut", "logout", Icons.Default.ExitToApp)
     object MyReports : LoggedSpotterScreens("My Reports", "myReports", Icons.Default.Info)
     /*TO DO*/
+}
+
+sealed class LoggedCleanerScreens(
+    val title: String,
+    val route: String,
+    val icon: ImageVector
+) {
+    object MyHome : LoggedCleanerScreens("My Profile", "myCleanerProfile", Icons.Default.Home)
+    object LogOut : LoggedCleanerScreens("LogOut", "logout", Icons.Default.ExitToApp )
 }

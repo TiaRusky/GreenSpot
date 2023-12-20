@@ -76,7 +76,6 @@ class LoginCleanerViewModel : ViewModel() {
                     ).show()
                     //se va a buon fine devo far andare l'utente alla login page
                 }
-
             }
             .addOnFailureListener {
                 loginInProgress.value = false //if the user insert a wrong value, the progress indicator has to hide

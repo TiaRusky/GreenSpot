@@ -19,6 +19,7 @@ fun SetupNavGraph(
         startDestination = WELCOME,
         route = ROOT
     ){
+
         loginGraph(
             navController = navController,
             googleAuthClient = googleAuthClient,

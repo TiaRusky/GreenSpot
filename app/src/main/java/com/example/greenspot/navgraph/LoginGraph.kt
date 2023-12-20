@@ -16,6 +16,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.greenspot.presentation.cleaner.sign.CleanerProfileScreen
 import com.example.greenspot.presentation.cleaner.sign.LoginCleanerScreen
 import com.example.greenspot.presentation.cleaner.sign.SignUpCleanerScreen
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
@@ -102,6 +103,25 @@ fun NavGraphBuilder.loginGraph(
             SpotterProfileScreen(
                 navController = navController,
                 userData = googleAuthClient.getSignedInUser(),
+                onSignOut = {
+                    lifecycleScope.launch{
+                        googleAuthClient.signOut()
+                        Toast.makeText(
+                            applicationContext,
+                            "Signed out",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }.invokeOnCompletion {
+                        navController.popBackStack()
+                    }
+                }
+            )
+        }
+
+        /* --- CLEANER GRAPH --- */
+        composable(route = GreenspotScreen.CleanerProfile.name){
+            CleanerProfileScreen(
+                navController = navController,
                 onSignOut = {
                     lifecycleScope.launch{
                         googleAuthClient.signOut()
