@@ -73,7 +73,7 @@ fun LoginCleanerScreen(
                     labelValue = "Email",
                     painterResource = painterResource(id = R.drawable.message),
                     onTextChanged = {
-                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.EmailChanged(it), applicationContext = applicationContext)
+                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.EmailChanged(it), applicationContext = applicationContext, navController = navController)
                     },
                     errorStatus = loginCleanerViewModel.loginCleanerUIState.value.emailError
                 )
@@ -83,7 +83,7 @@ fun LoginCleanerScreen(
                     labelValue = "Password",
                     painterResource = painterResource(id = R.drawable.ic_lock),
                     onTextSelected = {
-                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.PasswordChanged(it), applicationContext = applicationContext)
+                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.PasswordChanged(it), applicationContext = applicationContext, navController = navController)
                     },
                     errorStatus = loginCleanerViewModel.loginCleanerUIState.value.passwordError
                 )
@@ -104,7 +104,7 @@ fun LoginCleanerScreen(
                 ButtonComponent(
                     value = "Login",
                     onButtonClicked = {
-                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.LoginButtonClicked, applicationContext = applicationContext) //used as a callback after the user inserts the data
+                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.LoginButtonClicked, applicationContext = applicationContext, navController = navController) //used as a callback after the user inserts the data
                     },
                     isEnabled = loginCleanerViewModel.allValidationsPassed.value //if isEnabled is true then the register button is enabled
                 )

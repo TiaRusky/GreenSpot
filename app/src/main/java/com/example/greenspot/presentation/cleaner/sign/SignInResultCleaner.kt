@@ -1,4 +1,4 @@
-package com.example.greenspot.presentation.sign_in
+package com.example.greenspot.presentation.cleaner.sign
 
 
 data class SignInResult(
@@ -6,8 +6,9 @@ data class SignInResult(
     val errorMessage: String?
 )
 
-data class UserData(
+data class CleanerData(
     val userId : String = "",
     val username : String? = "",
-    val profilePictureUrl: String? = ""
+    val email : String? = "",
+    val profilePictureUrl: String? = null
 )
