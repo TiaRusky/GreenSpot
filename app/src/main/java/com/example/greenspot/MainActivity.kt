@@ -3,6 +3,7 @@ package com.example.greenspot
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -12,6 +13,7 @@ import com.example.greenspot.ui.theme.GreenspotTheme
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.navgraph.SetupNavGraph
+import com.example.greenspot.presentation.cleaner.sign.CleanerProfileScreenViewModel
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 
 
@@ -43,12 +45,15 @@ class MainActivity : ComponentActivity() {
                     val applicationContext = applicationContext
                     val lifecycleScope = lifecycleScope
 
+                    val cleanerViewModel: CleanerProfileScreenViewModel by viewModels()     //used to collect the login data of a cleaner
+
 
                     SetupNavGraph(
                         navController = navController,
                         googleAuthClient = googleAuthClient,
                         lifecycleScope = lifecycleScope,
-                        applicationContext = applicationContext
+                        applicationContext = applicationContext,
+                        cleanerViewModel = cleanerViewModel
                     )
 
                 }

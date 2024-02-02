@@ -51,7 +51,7 @@ fun SignUpCleanerScreen(
             ){
                 Box(
                     modifier = Modifier
-                        .size(100.dp,100.dp),
+                        .size(150.dp,150.dp),
                 ){
                     Image(
                         painter = painterResource(id = R.drawable.ic_trees),

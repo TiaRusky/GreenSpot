@@ -1,5 +1,6 @@
 package com.example.greenspot.navgraph
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -16,8 +17,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.greenspot.presentation.cleaner.sign.CleanerProfileScreen
+import com.example.greenspot.presentation.cleaner.profile.CleanerProfileScreen
+import com.example.greenspot.presentation.cleaner.sign.CleanerProfileScreenViewModel
 import com.example.greenspot.presentation.cleaner.sign.LoginCleanerScreen
+import com.example.greenspot.presentation.cleaner.sign.LoginCleanerViewModel
 import com.example.greenspot.presentation.cleaner.sign.SignUpCleanerScreen
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 import com.example.greenspot.presentation.sign_in.SignInViewModel
@@ -25,11 +28,13 @@ import com.example.greenspot.presentation.spotter.SpotterProfileScreen
 import com.example.greenspot.ui.SignInScreen
 import kotlinx.coroutines.launch
 
+@SuppressLint("StateFlowValueCalledInComposition")
 fun NavGraphBuilder.loginGraph(
     navController: NavHostController,
     googleAuthClient: GoogleAuthUIClient,
     lifecycleScope: LifecycleCoroutineScope,
-    applicationContext: Context
+    applicationContext: Context,
+    cleanerViewModel: CleanerProfileScreenViewModel,
 ){
     navigation(
         startDestination = GreenspotScreen.SignIn.name,
@@ -120,6 +125,7 @@ fun NavGraphBuilder.loginGraph(
 
         /* --- CLEANER GRAPH --- */
         composable(route = GreenspotScreen.CleanerProfile.name){
+
             CleanerProfileScreen(
                 navController = navController,
                 onSignOut = {
@@ -133,7 +139,8 @@ fun NavGraphBuilder.loginGraph(
                     }.invokeOnCompletion {
                         navController.popBackStack()
                     }
-                }
+                },
+                cleanerData = cleanerViewModel.uiState.value
             )
         }
 

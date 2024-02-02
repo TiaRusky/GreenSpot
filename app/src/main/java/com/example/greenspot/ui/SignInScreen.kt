@@ -57,7 +57,7 @@ fun SignInScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                //.background(Color.White)
+                .background(Color.White)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally

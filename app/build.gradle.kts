@@ -53,6 +53,7 @@ android {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
 
     //Google OAuth
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
