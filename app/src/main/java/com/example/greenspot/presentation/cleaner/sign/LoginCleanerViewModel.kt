@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginCleanerViewModel : ViewModel() {
+class LoginCleanerViewModel(val successLogin:()->Unit) : ViewModel() {
 
     var loginCleanerUIState = mutableStateOf(LoginCleanerUIState())
     var allValidationsPassed = mutableStateOf(false) //used to check all the validation
@@ -75,6 +75,7 @@ class LoginCleanerViewModel : ViewModel() {
                         Toast.LENGTH_LONG
                     ).show()
                     //se va a buon fine devo far andare l'utente alla login page
+                    successLogin()
                 }
             }
             .addOnFailureListener {

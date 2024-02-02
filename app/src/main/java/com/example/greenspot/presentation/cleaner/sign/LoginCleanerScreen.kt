@@ -32,98 +32,101 @@ fun LoginCleanerScreen(
     applicationContext: Context,
     navController: NavHostController
 ) {
-    Box(
+    Surface(
         modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(28.dp)
     ) {
-        Surface (
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(28.dp)
-        ){
-            Column(
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
                 modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Box(
-                    modifier = Modifier
-                        .size(150.dp,150.dp),
-                ){
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_trees),
-                        contentDescription = "logo"
-                    )
-                }
-                Spacer(
-                    modifier = Modifier
-                        .height(20.dp)
+                    .size(100.dp, 100.dp),
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_trees),
+                    contentDescription = "logo"
                 )
-                NormalTextComponent(value = "Login")
-                HeadingTextComponent(value = "Welcome back")
-                Spacer(
-                    modifier = Modifier
-                        .height(40.dp)
-                )
-
-                //field for email
-                MyTextFieldComponent(
-                    labelValue = "Email",
-                    painterResource = painterResource(id = R.drawable.message),
-                    onTextChanged = {
-                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.EmailChanged(it), applicationContext = applicationContext)
-                    },
-                    errorStatus = loginCleanerViewModel.loginCleanerUIState.value.emailError
-                )
-
-                //field for password
-                PasswordTextFieldComponent(
-                    labelValue = "Password",
-                    painterResource = painterResource(id = R.drawable.ic_lock),
-                    onTextSelected = {
-                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.PasswordChanged(it), applicationContext = applicationContext)
-                    },
-                    errorStatus = loginCleanerViewModel.loginCleanerUIState.value.passwordError
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .height(10.dp)
-                )
-
-                UnderLinedTextComponent(value = "Forgot your password")
-
-                Spacer(
-                    modifier = Modifier
-                        .height(20.dp)
-                )
-
-                //login button
-                ButtonComponent(
-                    value = "Login",
-                    onButtonClicked = {
-                        loginCleanerViewModel.onEvent(LoginCleanerUIEvent.LoginButtonClicked, applicationContext = applicationContext) //used as a callback after the user inserts the data
-                    },
-                    isEnabled = loginCleanerViewModel.allValidationsPassed.value //if isEnabled is true then the register button is enabled
-                )
-                DividerTextComponent()
-
-                //Register (as cleaner)  link
-                ClickableLoginTextComponent(tryToLogin = false, onTextSelected = {
-                    navController.navigate(GreenspotScreen.SignUpCleaner.name){
-                        //Remove the login screen to move to the registration screen
-                        popUpTo(navController.graph.findStartDestination().id)
-                    }
-                })
             }
-        }
+            Spacer(
+                modifier = Modifier
+                    .height(20.dp)
+            )
+            NormalTextComponent(value = "Login")
+            HeadingTextComponent(value = "Welcome back")
+            Spacer(
+                modifier = Modifier
+                    .height(40.dp)
+            )
 
-        //If signUpInProgress is true then we can show the circular progress indicator
-        if(loginCleanerViewModel.loginInProgress.value) {
-            CircularProgressIndicator()
+            //field for email
+            MyTextFieldComponent(
+                labelValue = "Email",
+                painterResource = painterResource(id = R.drawable.message),
+                onTextChanged = {
+                    loginCleanerViewModel.onEvent(
+                        LoginCleanerUIEvent.EmailChanged(it),
+                        applicationContext = applicationContext
+                    )
+                },
+                errorStatus = loginCleanerViewModel.loginCleanerUIState.value.emailError
+            )
+
+            //field for password
+            PasswordTextFieldComponent(
+                labelValue = "Password",
+                painterResource = painterResource(id = R.drawable.ic_lock),
+                onTextSelected = {
+                    loginCleanerViewModel.onEvent(
+                        LoginCleanerUIEvent.PasswordChanged(it),
+                        applicationContext = applicationContext
+                    )
+                },
+                errorStatus = loginCleanerViewModel.loginCleanerUIState.value.passwordError
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .height(10.dp)
+            )
+
+            UnderLinedTextComponent(value = "Forgot your password")
+
+            Spacer(
+                modifier = Modifier
+                    .height(20.dp)
+            )
+
+            //login button
+            ButtonComponent(
+                value = "Login",
+                onButtonClicked = {
+                    loginCleanerViewModel.onEvent(
+                        LoginCleanerUIEvent.LoginButtonClicked,
+                        applicationContext = applicationContext
+                    ) //used as a callback after the user inserts the data
+                },
+                isEnabled = loginCleanerViewModel.allValidationsPassed.value //if isEnabled is true then the register button is enabled
+            )
+            DividerTextComponent()
+
+            //Register (as cleaner)  link
+            ClickableLoginTextComponent(tryToLogin = false, onTextSelected = {
+                navController.navigate(GreenspotScreen.SignUpCleaner.name) {
+                    //Remove the login screen to move to the registration screen
+                    popUpTo(navController.graph.findStartDestination().id)
+                }
+            })
         }
+    }
+
+    //If signUpInProgress is true then we can show the circular progress indicator
+    if (loginCleanerViewModel.loginInProgress.value) {
+        CircularProgressIndicator()
     }
 
 }
