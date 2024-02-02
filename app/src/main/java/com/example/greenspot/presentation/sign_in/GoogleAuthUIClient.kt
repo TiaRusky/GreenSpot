@@ -3,13 +3,21 @@ package com.example.greenspot.presentation.sign_in
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.runtime.mutableStateOf
+import androidx.navigation.NavHostController
 import com.example.greenspot.R
+import com.example.greenspot.navgraph.GreenspotScreen
+import com.example.greenspot.presentation.cleaner.sign.RegistrationCleanerUIState
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 
@@ -24,12 +32,13 @@ class GoogleAuthUIClient(
         val result = try{
             oneTapClient.beginSignIn(
                 buildSingInRequest()
-            ).await()   //Wait untile the routine is completed
+            ).await()   //Wait untill the routine is completed
         }catch (e: Exception){
             e.printStackTrace()
             if ( e is CancellationException) throw e
             null
         }
+
         return result?.pendingIntent?.intentSender   //The intent contains the infos about the signed google account
     }
 
@@ -41,6 +50,9 @@ class GoogleAuthUIClient(
 
         return try{
             val user = auth.signInWithCredential(googleCredentials).await().user
+
+            createUserInFirebase(user?.uid,user?.email)
+
             SignInResult(
                 data = user?.run {
                     UserData(
@@ -60,6 +72,60 @@ class GoogleAuthUIClient(
                 errorMessage = e.message
             )
         }
+    }
+
+    //Insert user in firebase database
+    private fun createUserInFirebase(uid:String? ,email: String?) {
+        var duid = uid ?: "0"
+        var db = Firebase.firestore
+        //The data to save in firestore
+        val userMap = hashMapOf(
+            "uid" to uid,
+            "email" to email,
+            "type" to "spotter"
+        )
+
+        //Verify if the user is already there
+        val userRef = db.collection("users").document(duid)
+        val usersCollection = db.collection("users")
+
+        usersCollection.whereEqualTo("uid", duid)       //check if the user is already stored
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val itExists = !querySnapshot.isEmpty
+                if(!itExists){  //If not present add it
+                    userRef.set(userMap)
+                        .addOnSuccessListener {
+                            Log.d("Firestore", "Salvataggio utente andanto a buon fine")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.d("Firestore", "Errore nel salvataggio dell'utente: $e")
+                        }
+                }
+            }
+            .addOnFailureListener{e->
+                Log.d("Firestore", "Errore nella ricerca dell'utente: $e")
+            }
+
+
+        userRef.get()
+            .addOnSuccessListener { documentSnapshot ->
+                // Controlla se il documento esiste
+                val isUserLoaded = documentSnapshot.exists()
+                //If the user is not loaded add it to Firestore
+                if(!isUserLoaded){
+                    userRef.set(userMap)
+                        .addOnSuccessListener {
+                            Log.d("Firestore", "Salvataggio utente andanto a buon fine")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.d("Firestore", "Errore nel salvataggio dell'utente: $e")
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.d("Firestore", "Errore nella query dell'utente: $e")
+            }
     }
 
     suspend fun signOut(){

@@ -4,6 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
+import com.example.greenspot.navgraph.GreenspotScreen
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginCleanerViewModel(val successLogin:()->Unit) : ViewModel() {
@@ -12,7 +14,7 @@ class LoginCleanerViewModel(val successLogin:()->Unit) : ViewModel() {
     var allValidationsPassed = mutableStateOf(false) //used to check all the validation
     var loginInProgress = mutableStateOf(false) //used to see the circular progress bar
 
-    fun onEvent(event:LoginCleanerUIEvent, applicationContext: Context) {
+    fun onEvent(event:LoginCleanerUIEvent, applicationContext: Context, navController: NavHostController) {
 
         when(event) {
 
@@ -29,7 +31,7 @@ class LoginCleanerViewModel(val successLogin:()->Unit) : ViewModel() {
             }
 
             is LoginCleanerUIEvent.LoginButtonClicked -> {
-                login(applicationContext)
+                login(applicationContext, navController = navController)
             }
         }
         validateLoginDataWithRules()
@@ -56,7 +58,7 @@ class LoginCleanerViewModel(val successLogin:()->Unit) : ViewModel() {
     }
 
     //Login function
-    private fun login(applicationContext: Context) {
+    private fun login(applicationContext: Context, navController: NavHostController) {
 
         loginInProgress.value = true
         val email = loginCleanerUIState.value.email
@@ -74,8 +76,7 @@ class LoginCleanerViewModel(val successLogin:()->Unit) : ViewModel() {
                         "SignIn Successful",
                         Toast.LENGTH_LONG
                     ).show()
-                    //se va a buon fine devo far andare l'utente alla login page
-                    successLogin()
+                    navController.navigate(GreenspotScreen.CleanerProfile.name)
                 }
             }
             .addOnFailureListener {

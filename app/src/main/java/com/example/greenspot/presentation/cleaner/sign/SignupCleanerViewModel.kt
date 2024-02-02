@@ -6,8 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.greenspot.navgraph.GreenspotScreen
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.firestore.firestore
 
 class SignupCleanerViewModel : ViewModel() {
 
@@ -51,7 +53,7 @@ class SignupCleanerViewModel : ViewModel() {
 
     //function used to create user in firebase database
     private fun signUp(applicationContext: Context, navController: NavHostController) {
-        createUserInFirebase(email = registrationCleanerUIState.value.email, password = registrationCleanerUIState.value.password, applicationContext = applicationContext, navController = navController)
+        createUserInFirebase(companyName = registrationCleanerUIState.value.companyName, email = registrationCleanerUIState.value.email, password = registrationCleanerUIState.value.password, applicationContext = applicationContext, navController = navController)
     }
 
     //function to call the validator and validate the strings that user insert in the signup screen
@@ -84,15 +86,23 @@ class SignupCleanerViewModel : ViewModel() {
     }
 
     //Insert user in firebase database
-    private fun createUserInFirebase(email: String, password: String, applicationContext: Context, navController: NavHostController) {
+    private fun createUserInFirebase(companyName: String, email: String, password: String, applicationContext: Context, navController: NavHostController) {
+        var db = Firebase.firestore
+        val userMap = hashMapOf(
+            "companyName" to companyName,
+            "email" to email,
+            "password" to password,
+            "type" to "cleaner"
+        )
 
         signUpInProgress.value = true //when click on register, we see the circular progress indicator
         FirebaseAuth
             .getInstance()
             .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { // callback method that if everything is completed we will just add the user
-
                 if(it.isSuccessful) {
+                    val userId = FirebaseAuth.getInstance().currentUser!!.uid //to obtain userId of the authentication
+                    db.collection("users").document(userId).set(userMap) //to store cleaners in firestore with specific userId
                     signUpInProgress.value = false
                     Toast.makeText(
                         applicationContext,

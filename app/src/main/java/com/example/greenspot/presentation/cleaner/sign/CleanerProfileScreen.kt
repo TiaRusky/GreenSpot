@@ -1,16 +1,20 @@
 package com.example.greenspot.presentation.cleaner.sign
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.presentation.sign_in.UserData
@@ -35,6 +40,10 @@ import com.example.greenspot.R
 import com.example.greenspot.navgraph.LoggedCleanerScreens
 import com.example.greenspot.navgraph.LoggedSpotterScreens
 import com.example.greenspot.presentation.common.GreenspotBottomBar
+import com.example.greenspot.presentation.sign_in.SignInResult
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,36 +70,29 @@ fun CleanerProfileScreen(
                 .fillMaxSize()
         ) {
             item {
-                SpotterProfileInfos(
-                    userData = UserData(
-                        userId = "Preview_UserID_CLEANER",
-                        username = "Preview_Username_CLEANER",
-                        profilePictureUrl = null
-                    ),
-                )
-            }
-
-            item{
-
+                SpotterProfileInfos()
             }
         }
     }
-
 }
 
 @Composable
 fun SpotterProfileInfos(
-    userData: UserData?
+    cleanerProfileScreenViewModel: CleanerProfileScreenViewModel = viewModel()
 ) {
+    val userId = FirebaseAuth.getInstance().currentUser!!.uid
+    cleanerProfileScreenViewModel.updateUserData(userId)
+    val companyName = cleanerProfileScreenViewModel.cleanerData.value.username
+    val profilePictureUrl = cleanerProfileScreenViewModel.cleanerData.value.profilePictureUrl
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.secondary)
             .padding(12.dp)
     ) {
-        if (userData?.profilePictureUrl != null) {
+        if (profilePictureUrl != null) {
             AsyncImage(
-                model = userData.profilePictureUrl,
+                model = profilePictureUrl,
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .size(50.dp)
@@ -110,9 +112,9 @@ fun SpotterProfileInfos(
             )
         }
 
-        if (userData?.username != null) {
+        if (companyName != null) {
             Text(
-                text = userData.username,
+                text = companyName,
                 textAlign = TextAlign.Center,
                 fontSize = 26.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -133,7 +135,7 @@ fun SpotterProfileData(){
         //modifier = Modifier.fillMaxHeight(),
     ){
         item {
-
+            Text(text = "AAAAAAAAAAA")
         }
     }
 }
@@ -156,13 +158,7 @@ fun SpotterProfileScreenPreview() {
 @Preview
 @Composable
 fun SpotterProfileInfosPreview(){
-    SpotterProfileInfos(
-        userData = UserData(
-            userId = "Preview_UserID",
-            username = "Preview_Username",
-            profilePictureUrl = null
-        )
-    )
+    SpotterProfileInfos()
 }
 
 @Preview
