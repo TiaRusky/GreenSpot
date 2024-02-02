@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import com.example.greenspot.navgraph.GreenspotScreen
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginCleanerViewModel : ViewModel() {
+class LoginCleanerViewModel(val successLogin:()->Unit) : ViewModel() {
 
     var loginCleanerUIState = mutableStateOf(LoginCleanerUIState())
     var allValidationsPassed = mutableStateOf(false) //used to check all the validation
