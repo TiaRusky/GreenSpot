@@ -1,5 +1,6 @@
 package com.example.greenspot.presentation.cleaner.profile
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -34,18 +36,22 @@ import coil.compose.AsyncImage
 import com.example.greenspot.R
 import com.example.greenspot.navgraph.LoggedCleanerScreens
 import com.example.greenspot.presentation.cleaner.sign.CleanerData
+import com.example.greenspot.presentation.cleaner.sign.CleanerProfileScreenViewModel
 
 import com.example.greenspot.presentation.common.GreenspotBottomBar
-
+import com.google.firebase.auth.FirebaseAuth
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CleanerProfileScreen(
+    cleanerProfileScreenViewModel : CleanerProfileScreenViewModel = viewModel(),
     navController: NavHostController,
     onSignOut: () -> Unit,
     cleanerData : CleanerData,
 ) {
+    val userId = FirebaseAuth.getInstance().currentUser!!.uid //to obtain userId of the authentication
+    cleanerProfileScreenViewModel.updateCleanerData(userId)
     Scaffold(
         bottomBar = {
             GreenspotBottomBar(
@@ -72,7 +78,7 @@ fun CleanerProfileScreen(
 
 @Composable
 fun SpotterProfileInfos(
-    cleanerData: CleanerData,
+    cleanerData: CleanerData
 ) {
     val companyName = cleanerData.username
     val profilePictureUrl = cleanerData.profilePictureUrl
