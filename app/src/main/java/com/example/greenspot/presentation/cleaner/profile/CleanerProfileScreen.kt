@@ -1,5 +1,6 @@
 package com.example.greenspot.presentation.cleaner.profile
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,16 +43,19 @@ import com.example.greenspot.presentation.common.GreenspotBottomBar
 import com.google.firebase.auth.FirebaseAuth
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CleanerProfileScreen(
-    cleanerProfileScreenViewModel : CleanerProfileScreenViewModel = viewModel(),
     navController: NavHostController,
     onSignOut: () -> Unit,
-    cleanerData : CleanerData,
+    //cleanerData : CleanerData,
 ) {
-    val userId = FirebaseAuth.getInstance().currentUser!!.uid //to obtain userId of the authentication
-    cleanerProfileScreenViewModel.updateCleanerData(userId)
+    val cleanerProfileViewModel: CleanerProfileScreenViewModel = viewModel()
+    val userId = FirebaseAuth.getInstance().currentUser!!.uid           //to obtain userId of the authentication
+    cleanerProfileViewModel.updateCleanerData(userId)
+
+    Log.i("cleaner","data: "+cleanerProfileViewModel.uiState.value)
     Scaffold(
         bottomBar = {
             GreenspotBottomBar(
@@ -70,7 +74,7 @@ fun CleanerProfileScreen(
                 .fillMaxSize()
         ) {
             item {
-                SpotterProfileInfos(cleanerData)
+                SpotterProfileInfos(cleanerProfileViewModel.uiState.value)
             }
         }
     }
@@ -149,12 +153,7 @@ fun SpotterProfileScreenPreview() {
     CleanerProfileScreen(
         navController = rememberNavController(),
         onSignOut = {},
-        cleanerData = CleanerData(
-            userId = "1",
-            username = "TestUsername",
-            email = "TestEmail",
-            profilePictureUrl = null
-        )
+
     )
 }
 

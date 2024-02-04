@@ -22,10 +22,22 @@ class CleanerProfileScreenViewModel : ViewModel(){
         ref.get().addOnSuccessListener { document ->
             _uiState.update { currentState ->
                 currentState.copy(
+                    userId = id,
                     username = document.getString("companyName"),
                     email = document.getString("email")
                 )
             }
         }
     }
+
+    fun updateCleanerData(id:String,username:String,email:String){
+        _uiState.update { currentState ->
+            currentState.copy(
+                userId = id,
+                username = username,
+                email = email
+            )
+        }
+    }
+
 }

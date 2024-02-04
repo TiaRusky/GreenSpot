@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.firestore.firestore
 
-class SignupCleanerViewModel : ViewModel() {
+class SignupCleanerViewModel() : ViewModel() {
 
     var registrationCleanerUIState = mutableStateOf(RegistrationCleanerUIState())
     var allValidationsPassed = mutableStateOf(false) //used to check all the validation

@@ -3,7 +3,9 @@ package com.example.greenspot.presentation.cleaner.sign
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.example.greenspot.navgraph.GreenspotScreen
 import com.google.firebase.auth.FirebaseAuth
@@ -76,7 +78,9 @@ class LoginCleanerViewModel() : ViewModel() {
                         "SignIn Successful",
                         Toast.LENGTH_LONG
                     ).show()
-                    navController.navigate(GreenspotScreen.CleanerProfile.name)
+
+                    val viewModelStoreOwner = applicationContext as? FragmentActivity ?: throw IllegalArgumentException("Il contesto non è un FragmentActivity")
+                    val cleanerProfileScreenViewModel = ViewModelProvider(viewModelStoreOwner).get(CleanerProfileScreenViewModel::class.java)
                 }
             }
             .addOnFailureListener {

@@ -140,7 +140,7 @@ fun NavGraphBuilder.loginGraph(
                         navController.popBackStack()
                     }
                 },
-                cleanerData = cleanerViewModel.uiState.value
+                //cleanerData = cleanerViewModel.uiState.value
             )
         }
 

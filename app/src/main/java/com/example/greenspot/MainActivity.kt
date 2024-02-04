@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.navgraph.SetupNavGraph
 import com.example.greenspot.presentation.cleaner.sign.CleanerProfileScreenViewModel
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
+import com.example.greenspot.presentation.spotter.SpotterReportsViewModel
 
 
 class MainActivity : ComponentActivity() {
