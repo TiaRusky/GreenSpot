@@ -49,7 +49,7 @@ import com.google.firebase.auth.FirebaseAuth
 fun CleanerProfileScreen(
     navController: NavHostController,
     onSignOut: () -> Unit,
-    //cleanerData : CleanerData,
+    //cleanerData : CleanerData
 ) {
     val cleanerProfileViewModel: CleanerProfileScreenViewModel = viewModel()
     val userId = FirebaseAuth.getInstance().currentUser!!.uid           //to obtain userId of the authentication
