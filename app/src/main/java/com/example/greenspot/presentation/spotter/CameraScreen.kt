@@ -14,11 +14,18 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -44,10 +51,18 @@ fun CameraContent(){
     Scaffold (
         modifier = Modifier
             .fillMaxSize(),
+        floatingActionButtonPosition = FabPosition.Center, //per centrare il button al centro
         floatingActionButton = { //button per scattare la foto
             ExtendedFloatingActionButton(
-                text = { Text(text = "take photo") },
-                icon = { /*TODO*/ },
+                text = {  },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Camera,
+                        contentDescription = "Camera capture icon",
+                        modifier = Modifier
+                            .size(70.dp)
+                    )
+                },
                 onClick = {
                     val mainExecutor = ContextCompat.getMainExecutor(context) //esecutore per lo scatto della foto
                     cameraController.takePicture(mainExecutor, object: ImageCapture.OnImageCapturedCallback(){ //il controller eseguirà lo scatto della foto e acquisiremo la foto con object
