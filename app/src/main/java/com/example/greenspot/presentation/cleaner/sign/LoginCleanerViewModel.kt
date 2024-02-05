@@ -79,8 +79,7 @@ class LoginCleanerViewModel() : ViewModel() {
                         Toast.LENGTH_LONG
                     ).show()
 
-                    val viewModelStoreOwner = applicationContext as? FragmentActivity ?: throw IllegalArgumentException("Il contesto non è un FragmentActivity")
-                    val cleanerProfileScreenViewModel = ViewModelProvider(viewModelStoreOwner).get(CleanerProfileScreenViewModel::class.java)
+                    navController.navigate(GreenspotScreen.CleanerProfile.name)
                 }
             }
             .addOnFailureListener {
@@ -92,5 +91,29 @@ class LoginCleanerViewModel() : ViewModel() {
                 ).show()
             }
     }
+
+
+     fun logout(applicationContext: Context) {
+        val firebaseAuth = FirebaseAuth.getInstance()
+
+        firebaseAuth.signOut()
+
+        val authStateListener =
+            FirebaseAuth.AuthStateListener {     //inside this we are getting firebase authentication
+
+                if (it.currentUser == null) {   //this means that signOut is successful
+                    Toast.makeText(
+                        applicationContext,
+                        "Signed out",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    //se va a buon fine devo far andare l'utente alla login page
+                }
+            }
+
+        firebaseAuth.addAuthStateListener(authStateListener)
+    }
+
+
 
 }

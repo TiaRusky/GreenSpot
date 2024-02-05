@@ -99,6 +99,13 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // CameraX library
+    implementation("androidx.camera:camera-camera2:1.3.0-alpha07")
+    implementation("androidx.camera:camera-lifecycle:1.3.0-alpha07")
+    implementation("androidx.camera:camera-view:1.3.0-alpha07")
+    implementation("androidx.camera:camera-extensions:1.3.0-alpha07")
+    //implementation("com.google.firebase:firebase-storage:23.0.0")
+
     //Extra icon dependency
     implementation("androidx.compose.material:material-icons-extended")
 

@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.greenspot.navgraph.BaseScreen
+import com.example.greenspot.navgraph.LoggedCleanerScreens
 import com.example.greenspot.navgraph.LoggedSpotterScreens
 
 
@@ -27,15 +29,24 @@ import com.example.greenspot.navgraph.LoggedSpotterScreens
 fun GreenspotBottomBar(
     navController: NavHostController,
     onSignOut: () -> Unit,
-    selectedScreen: String
+    selectedScreen: String,
+    isSpotter : Boolean //Allow to use the same bar in different way both for cleaners and spotters
 ) {
-
+    //Define the screen based of if the user is spotter or cleaner
+    val items : List<BaseScreen> = if(isSpotter){
+        listOf(
+            LoggedSpotterScreens.MyHome,
+            LoggedSpotterScreens.MyReports,
+        )
+    }
+    else{
+        listOf(
+            LoggedCleanerScreens.MyHome,
+            LoggedCleanerScreens.ShowReports
+        )
+    }
     //List of items that will compose the bottomNavigationBar
-    val items = listOf(
-        LoggedSpotterScreens.MyHome,
-        LoggedSpotterScreens.MyReports,
-        //LoggedSpotterScreens.LogOut
-    )
+
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.primary     //BottomNavigation color
@@ -126,6 +137,7 @@ fun GreenspotBottomBarPreview() {
     GreenspotBottomBar(
         navController = rememberNavController(),
         selectedScreen = LoggedSpotterScreens.MyHome.title,
-        onSignOut = {}
+        onSignOut = {},
+        isSpotter = true
     )
 }

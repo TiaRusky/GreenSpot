@@ -49,7 +49,8 @@ import com.google.firebase.auth.FirebaseAuth
 fun CleanerProfileScreen(
     navController: NavHostController,
     onSignOut: () -> Unit,
-    cleanerProfileViewModel: CleanerProfileScreenViewModel = viewModel()
+    //cleanerProfileViewModel: CleanerProfileScreenViewModel = viewModel()
+    //cleanerData : CleanerData
 ) {
     //val cleanerProfileUiState by cleanerProfileViewModel.uiState.collectAsState()
 
@@ -58,7 +59,8 @@ fun CleanerProfileScreen(
             GreenspotBottomBar(
                 navController = navController,
                 selectedScreen = LoggedCleanerScreens.MyHome.title,
-                onSignOut = onSignOut
+                onSignOut = onSignOut,
+                isSpotter = false
             )
         },
 
