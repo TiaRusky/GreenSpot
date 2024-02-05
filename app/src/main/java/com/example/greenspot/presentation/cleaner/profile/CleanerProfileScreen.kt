@@ -1,7 +1,6 @@
 package com.example.greenspot.presentation.cleaner.profile
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +18,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,19 +44,15 @@ import com.example.greenspot.presentation.common.GreenspotBottomBar
 import com.google.firebase.auth.FirebaseAuth
 
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CleanerProfileScreen(
     navController: NavHostController,
     onSignOut: () -> Unit,
-    //cleanerData : CleanerData,
+    cleanerProfileViewModel: CleanerProfileScreenViewModel = viewModel()
 ) {
-    val cleanerProfileViewModel: CleanerProfileScreenViewModel = viewModel()
-    val userId = FirebaseAuth.getInstance().currentUser!!.uid           //to obtain userId of the authentication
-    cleanerProfileViewModel.updateCleanerData(userId)
+    //val cleanerProfileUiState by cleanerProfileViewModel.uiState.collectAsState()
 
-    Log.i("cleaner","data: "+cleanerProfileViewModel.uiState.value)
     Scaffold(
         bottomBar = {
             GreenspotBottomBar(
@@ -74,7 +71,9 @@ fun CleanerProfileScreen(
                 .fillMaxSize()
         ) {
             item {
-                SpotterProfileInfos(cleanerProfileViewModel.uiState.value)
+                SpotterProfileInfos(
+                    CleanerData()
+                )
             }
         }
     }
@@ -142,10 +141,6 @@ fun SpotterProfileData(){
     }
 }
 
-@Composable
-fun SpotterInfoCard(){
-
-}
 
 @Preview
 @Composable
@@ -169,10 +164,4 @@ fun SpotterProfileInfosPreview(){
             profilePictureUrl = null
         )
     )
-}
-
-@Preview
-@Composable
-fun SpotterInfoCardPreview(){
-    SpotterInfoCard()
 }

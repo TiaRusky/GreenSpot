@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     val applicationContext = applicationContext
                     val lifecycleScope = lifecycleScope
 
-                    val cleanerViewModel: CleanerProfileScreenViewModel by viewModels()     //used to collect the login data of a cleaner
+                    //val cleanerViewModel: CleanerProfileScreenViewModel by viewModels()     //used to collect the login data of a cleaner
 
 
                     SetupNavGraph(
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                         googleAuthClient = googleAuthClient,
                         lifecycleScope = lifecycleScope,
                         applicationContext = applicationContext,
-                        cleanerViewModel = cleanerViewModel
+                        //cleanerViewModel = cleanerViewModel
                     )
 
                 }

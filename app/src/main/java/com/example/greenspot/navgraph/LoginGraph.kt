@@ -34,7 +34,7 @@ fun NavGraphBuilder.loginGraph(
     googleAuthClient: GoogleAuthUIClient,
     lifecycleScope: LifecycleCoroutineScope,
     applicationContext: Context,
-    cleanerViewModel: CleanerProfileScreenViewModel,
+    //cleanerViewModel: CleanerProfileScreenViewModel,
 ){
     navigation(
         startDestination = GreenspotScreen.SignIn.name,

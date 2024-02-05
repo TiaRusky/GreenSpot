@@ -14,7 +14,7 @@ fun SetupNavGraph(
     googleAuthClient: GoogleAuthUIClient,
     lifecycleScope: LifecycleCoroutineScope,
     applicationContext: Context,
-    cleanerViewModel: CleanerProfileScreenViewModel,
+    //cleanerViewModel: CleanerProfileScreenViewModel,
 ){
     NavHost(
         navController = navController,
@@ -27,7 +27,7 @@ fun SetupNavGraph(
             googleAuthClient = googleAuthClient,
             lifecycleScope = lifecycleScope,
             applicationContext = applicationContext,
-            cleanerViewModel = cleanerViewModel
+            //cleanerViewModel = cleanerViewModel
         )
 
         spotterGraph(
