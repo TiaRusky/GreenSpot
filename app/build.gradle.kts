@@ -106,6 +106,8 @@ dependencies {
     implementation("androidx.camera:camera-extensions:1.3.0-alpha07")
     //implementation("com.google.firebase:firebase-storage:23.0.0")
 
+    implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
+
     //Extra icon dependency
     implementation("androidx.compose.material:material-icons-extended")
 

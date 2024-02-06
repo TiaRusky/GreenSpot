@@ -17,8 +17,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.Surface
@@ -54,6 +56,10 @@ import com.example.greenspot.R
 import com.example.greenspot.navgraph.LoggedSpotterScreens
 import com.example.greenspot.presentation.common.GreenspotBottomBar
 import com.example.greenspot.presentation.spotter.CameraScreen
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import java.io.File
 import java.util.Objects
 
@@ -147,6 +153,9 @@ fun SpotterProfileInfos(
 //Where will be inserted the info about the profile's activities in the app
 @Composable
 fun SpotterProfileData(made:Int,resolved:Int){
+
+    val scrollState = rememberScrollState()
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -160,32 +169,36 @@ fun SpotterProfileData(made:Int,resolved:Int){
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .verticalScroll(state = scrollState),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                GridItem(text = "Token", number = 0)
+
+                HeadTextComponent(value = "Your Activity Recap")
+
+                GridItem(text = "Token", number = 0, painterResource = painterResource(id = R.drawable.token))
+                Spacer(
+                    modifier = Modifier
+                        .height(10.dp)
+                )
+                GridItem(text = "Reports made", number = made, painterResource = painterResource(id = R.drawable.ic_reports_made))
+                Spacer(
+                    modifier = Modifier
+                        .height(10.dp)
+                )
+                GridItem(text = "Resolved reports", number = resolved, painterResource = painterResource(id = R.drawable.ic_resolved_report))
                 Spacer(
                     modifier = Modifier
                         .height(20.dp)
                 )
-                GridItem(text = "Reports made", number = made)
+                ShakePhoneIconComponent(painterResource = painterResource(id = R.drawable.ic_shake_phone))
                 Spacer(
                     modifier = Modifier
-                        .height(20.dp)
+                        .height(10.dp)
                 )
-                GridItem(text = "Resolved reports", number = resolved)
+                MainScreen()
             }
         }
-        //CameraScreen()
-        /*Button(
-            onClick = {
-                // Chiamata alla funzione per aprire la fotocamera
-                //CameraScreen()
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Apri Fotocamera")
-        }*/
     }
 
     /*LazyVerticalGrid(
@@ -207,6 +220,31 @@ fun SpotterProfileData(made:Int,resolved:Int){
             GridItem(text = "Resolved reports", number = resolved)
         }
     }*/
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun MainScreen() {
+
+    val cameraPermissionState: PermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+
+    MainContent(
+        hasPermission = cameraPermissionState.status.isGranted,
+        onRequestPermission = cameraPermissionState::launchPermissionRequest
+    )
+}
+
+@Composable
+private fun MainContent(
+    hasPermission: Boolean,
+    onRequestPermission: () -> Unit
+) {
+
+    if (hasPermission) {
+        CameraScreen()
+    } else {
+        NoPermissionScreen(onRequestPermission)
+    }
 }
 
 
@@ -237,11 +275,11 @@ fun SpotterProfileInfosPreview(){
     )
 }
 
-@Preview
+/*@Preview
 @Composable
 fun GridItemPreview(){
     GridItem("Cisanini",1)
-}
+}*/
 
 @Preview
 @Composable
