@@ -2,7 +2,6 @@ package com.example.greenspot.navgraph
 
 import android.content.Context
 import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -43,7 +42,7 @@ fun NavGraphBuilder.cleanerGraph(
 }
 
 //Logout & Redirection of the logged cleaner
-private fun logout(applicationContext: Context,loginCleanerViewModel : LoginCleanerViewModel,navController :NavHostController){
+private fun logout(applicationContext: Context, loginCleanerViewModel : LoginCleanerViewModel, navController :NavHostController){
     loginCleanerViewModel.logout(applicationContext)
     navController.navigate(GreenspotScreen.SignIn.name){   //Once logged out return to login screen
         popUpTo(GreenspotScreen.SignIn.name){               //Clear the screen stack to lighten the app

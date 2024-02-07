@@ -9,12 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.navgraph.LoggedCleanerScreens
-import com.example.greenspot.presentation.cleaner.sign.CleanerProfileScreenViewModel
-import com.example.greenspot.presentation.cleaner.sign.LoginCleanerViewModel
+
 import com.example.greenspot.presentation.common.GreenspotBottomBar
 
 @OptIn(ExperimentalMaterial3Api::class)

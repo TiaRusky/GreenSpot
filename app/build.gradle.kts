@@ -50,7 +50,12 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    buildFeatures {
+        compose = true
+    }
 }
+
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
@@ -73,6 +78,7 @@ dependencies {
 
     //BottomNav
     implementation("androidx.compose.material:material:1.4.2")
+    implementation("androidx.compose.material3:material3-android:1.2.0-alpha10")
 
     //Dependencies for firebase database
     implementation("com.google.firebase:firebase-database:20.3.0")
@@ -85,7 +91,10 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+
+    //implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3-android:1.2.0-rc01")
+
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
     implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")

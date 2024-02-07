@@ -3,11 +3,12 @@ package com.example.greenspot.presentation.cleaner.sign
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.example.greenspot.navgraph.GreenspotScreen
+import com.example.greenspot.presentation.cleaner.sign.LoginCleanerUIEvent
+import com.example.greenspot.presentation.cleaner.sign.LoginCleanerUIState
+import com.example.greenspot.presentation.cleaner.sign.Validator
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginCleanerViewModel() : ViewModel() {
@@ -16,7 +17,7 @@ class LoginCleanerViewModel() : ViewModel() {
     var allValidationsPassed = mutableStateOf(false) //used to check all the validation
     var loginInProgress = mutableStateOf(false) //used to see the circular progress bar
 
-    fun onEvent(event:LoginCleanerUIEvent, applicationContext: Context, navController: NavHostController) {
+    fun onEvent(event: LoginCleanerUIEvent, applicationContext: Context, navController: NavHostController) {
 
         when(event) {
 

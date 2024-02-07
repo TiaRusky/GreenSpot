@@ -1,6 +1,5 @@
 package com.example.greenspot.presentation.cleaner.profile
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,17 +30,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.greenspot.R
 import com.example.greenspot.navgraph.LoggedCleanerScreens
 import com.example.greenspot.presentation.cleaner.sign.CleanerData
-import com.example.greenspot.presentation.cleaner.sign.CleanerProfileScreenViewModel
-
 import com.example.greenspot.presentation.common.GreenspotBottomBar
-import com.google.firebase.auth.FirebaseAuth
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,10 +44,9 @@ import com.google.firebase.auth.FirebaseAuth
 fun CleanerProfileScreen(
     navController: NavHostController,
     onSignOut: () -> Unit,
-    //cleanerProfileViewModel: CleanerProfileScreenViewModel = viewModel()
-    //cleanerData : CleanerData
-) {
-    //val cleanerProfileUiState by cleanerProfileViewModel.uiState.collectAsState()
+    cleanerDataViewModel: CleanerDataViewModel = viewModel()
+    ) {
+    val cleanerDataUiState by cleanerDataViewModel.uiState.collectAsState()
 
     Scaffold(
         bottomBar = {
@@ -74,7 +68,7 @@ fun CleanerProfileScreen(
         ) {
             item {
                 SpotterProfileInfos(
-                    CleanerData()
+                    cleanerDataUiState
                 )
             }
         }
