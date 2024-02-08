@@ -2,6 +2,7 @@ package com.example.greenspot.navgraph
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -45,14 +46,29 @@ fun NavGraphBuilder.loginGraph(
 
             //Check if the user is already logged in
             LaunchedEffect(key1 = Unit){
-                if(googleAuthClient.getSignedInUser() != null){
-                    navController.navigate(GreenspotScreen.SpotterProfile.name){
+                if(googleAuthClient.getSignedInUser() != null){             //An user is already logged in
+                    val userData = googleAuthClient.getSignedInUser()
+                    if (userData != null) {
+                        if(userData.email?.contains("@gmail") == true){     //The logged user is a spotter
+                            navController.navigate(GreenspotScreen.SpotterProfile.name){
 
-                        //Once logged in the system, remove the login screen from the stack
-                        popUpTo(navController.graph.findStartDestination().id){
-                            inclusive = true
+                                //Once logged in the system, remove the login screen from the stack
+                                popUpTo(navController.graph.findStartDestination().id){
+                                    inclusive = true
+                                }
+                            }
+                        }
+
+                        else{           //The logged user is a cleaner
+                            navController.navigate(GreenspotScreen.CleanerProfile.name){
+                                //Once logged in the system, remove the login screen from the stack
+                                popUpTo(navController.graph.findStartDestination().id){
+                                    inclusive = true
+                                }
+                            }
                         }
                     }
+
                 }
             }
 
@@ -139,7 +155,6 @@ fun NavGraphBuilder.loginGraph(
                         navController.popBackStack()
                     }
                 },
-                //cleanerData = cleanerViewModel.uiState.value
             )
         }
 
