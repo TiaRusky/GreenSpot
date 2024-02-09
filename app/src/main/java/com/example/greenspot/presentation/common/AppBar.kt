@@ -83,6 +83,7 @@ fun GreenspotBottomBar(
                             },
                             modifier = Modifier.size(28.dp)
                         )
+                        /*
                         Text(
                             text = item.title,
                             color = if (item.title == selectedScreen) {
@@ -95,6 +96,7 @@ fun GreenspotBottomBar(
                             overflow = TextOverflow.Ellipsis,
                             fontSize = 9.sp
                         )
+                         */
                     }
                 }
             )
@@ -114,6 +116,7 @@ fun GreenspotBottomBar(
                         tint = Color.Gray,
                         modifier = Modifier.size(28.dp)
                     )
+                    /*
                     Text(
                         text = LoggedSpotterScreens.LogOut.title,
                         color = Color.Gray,
@@ -122,6 +125,8 @@ fun GreenspotBottomBar(
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 9.sp
                     )
+
+                     */
                 }
             }
         )

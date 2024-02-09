@@ -25,7 +25,8 @@ data class ListItemData(
     val date: String,
     val validated: Boolean,
     val location: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val votes: Int,
 )
 
 
@@ -85,7 +86,8 @@ class ReportsViewModel : ViewModel() {
                 date = data.get("date").toString(),
                 validated = data.get("resolved").toString().toBoolean(),
                 location = data.get("position").toString(),
-                imageUrl = data.get("imageURL").toString()
+                imageUrl = data.get("imageURL").toString(),
+                votes = (data.get("votes").toString()).toInt()
             )
 
             newItems += report

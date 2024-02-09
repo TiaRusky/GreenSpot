@@ -162,7 +162,7 @@ fun SpotterProfileData(made:Int,resolved:Int){
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                //.background()
                 .padding(28.dp)
         ) {
             Column(
@@ -171,7 +171,7 @@ fun SpotterProfileData(made:Int,resolved:Int){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                HeadTextComponent(value = "Your Activity Recap")
+                HeadTextComponent(value = "Activity Recap")
 
                 GridItem(text = "Token", number = 0, painterResource = painterResource(id = R.drawable.token))
                 Spacer(
@@ -198,38 +198,9 @@ fun SpotterProfileData(made:Int,resolved:Int){
         }
     }
 
-    /*LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(50.dp),
-        horizontalArrangement = Arrangement.spacedBy(60.dp),
-        modifier = Modifier.padding(16.dp)
-
-    ){
-        item{
-            GridItem(text = "Token", number = 0)
-        }
-
-        item{
-            GridItem(text = "Reports made", number = made)
-        }
-
-        item{
-            GridItem(text = "Resolved reports", number = resolved)
-        }
-    }*/
 }
 
-/*@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun MainScreen() {
 
-    val cameraPermissionState: PermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
-
-    MainContent(
-        hasPermission = cameraPermissionState.status.isGranted,
-        onRequestPermission = cameraPermissionState::launchPermissionRequest
-    )
-}*/
 
 @Composable
 fun Shake() {
@@ -299,11 +270,6 @@ fun SpotterProfileInfosPreview(){
     )
 }
 
-/*@Preview
-@Composable
-fun GridItemPreview(){
-    GridItem("Cisanini",1)
-}*/
 
 @Preview
 @Composable
