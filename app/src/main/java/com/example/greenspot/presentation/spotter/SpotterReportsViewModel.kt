@@ -23,7 +23,7 @@ class SpotterReportsViewModel: ViewModel() {
 
     private fun loadDataFromFirestore(){
         GlobalScope.launch(Dispatchers.IO) {
-            // Simulazione di un'operazione di lettura da Firestore
+
             val db = Firebase.firestore
             val userId = FirebaseAuth.getInstance().currentUser!!.uid
             val fieldName = "spotterId"

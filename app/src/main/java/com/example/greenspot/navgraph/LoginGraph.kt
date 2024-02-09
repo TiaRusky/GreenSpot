@@ -59,7 +59,7 @@ fun NavGraphBuilder.loginGraph(
                             }
                         }
 
-                        else{           //The logged user is a cleaner
+                        else{                   //The logged user is a cleaner
                             navController.navigate(GreenspotScreen.CleanerProfile.name){
                                 //Once logged in the system, remove the login screen from the stack
                                 popUpTo(navController.graph.findStartDestination().id){
