@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -30,12 +32,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.greenspot.R
 
 @Composable
 fun HeadTextComponent(value: String){
@@ -49,7 +54,7 @@ fun HeadTextComponent(value: String){
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
         ),
-        color = Color(0xff1d1617), //colorText
+        color = MaterialTheme.colorScheme.primary, //colorText
         textAlign = TextAlign.Center
     )
 }
@@ -61,9 +66,12 @@ fun GridItem(text: String, number: Int, painterResource: Painter) {
             .padding(horizontal = 8.dp, vertical = 8.dp)
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(corner = CornerSize(16.dp))
+        shape = RoundedCornerShape(corner = CornerSize(16.dp)),
+
     ){
-        Row{
+        Row(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.primary)
+        ){
             Image(
                 painter = painterResource,
                 contentDescription = "",
@@ -81,7 +89,7 @@ fun GridItem(text: String, number: Int, painterResource: Painter) {
                 Text(
                     text = "$text: $number",
                     fontSize = 30.sp,
-                    color = Color(0xff1d1617),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontStyle = FontStyle.Normal,
                 )
             }
@@ -134,3 +142,12 @@ fun animateShakeEffect(isShaking: Boolean): State<Float> {
     )
 }
 
+@Preview
+@Composable
+fun GridItemPreview(){
+    GridItem(
+        text = "ciap",
+        number =1 ,
+        painterResource =  painterResource(id = R.drawable.token)
+    )
+}

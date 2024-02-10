@@ -1,6 +1,10 @@
 package com.example.greenspot.presentation.spotter
 
 
+import android.content.Context
+import android.location.Address
+import android.location.Geocoder
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -32,20 +36,27 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.greenspot.navgraph.LoggedSpotterScreens
 import com.example.greenspot.presentation.common.GreenspotBottomBar
+import com.google.firebase.firestore.GeoPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.IOException
+import java.util.Calendar
+import java.util.Locale
 
 
 @Composable
@@ -55,7 +66,6 @@ fun SpotterReports(
     spotterViewModel: ReportsViewModel = viewModel()
 ) {
     val listItems by spotterViewModel.listItems.collectAsState()
-    val lastVisibleItem by spotterViewModel.lastVisibleItem.collectAsState()
     val isLoading by spotterViewModel.isLoading.collectAsState()
 
     val listState =
@@ -92,60 +102,6 @@ fun SpotterReports(
     }
 }
 
-/*
-@Composable
-fun ListItem(
-    listItemData: ListItemData,
-    onItemClick: (ListItemData) -> Unit
-) {
-    var showImage by remember { mutableStateOf(false) }     //It tells if the item has been clicked or not
-
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { /*onItemClick(listItemData)*/ showImage = !showImage }
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Icon(
-            imageVector = if (listItemData.validated) Icons.Default.CheckCircle else Icons.Default.Circle,
-            contentDescription = null,
-            tint = if (listItemData.validated) MaterialTheme.colorScheme.primary else Color.Gray,
-            modifier = Modifier.size(24.dp)
-        )
-
-        Spacer(modifier = Modifier.width(8.dp)) // Spazio tra l'icona e il testo
-
-
-        Text(
-            text = listItemData.date,
-            modifier = Modifier.weight(1f)
-        )
-
-        /*
-        Text(
-            text = listItemData.location,
-            modifier = Modifier.padding(end = 16.dp)
-        )
-        */
-
-        if (showImage) {
-            val painter = rememberAsyncImagePainter(
-                model = listItemData.imageUrl
-            )
-            Image(
-                painter = painter,
-                contentDescription = null,
-                modifier = Modifier.size(50.dp),
-                contentScale = ContentScale.Crop
-            )
-        }
-    }
-}
-*/
-
 @Composable
 fun ListItem(
     listItemData: ListItemData,
@@ -153,14 +109,39 @@ fun ListItem(
     val isChecked = listItemData.validated
     val borderColor = if (isChecked) MaterialTheme.colorScheme.primary else Color.Gray
 
-    //Manage when the item is clicked to show more informatios
+    //Manage when the item is clicked to show more data
     val expanded = remember { mutableStateOf(false) }
+
+    //Collects infos about the date
+    val date = listItemData.date.toDate()
+    val calendar = Calendar.getInstance()
+    calendar.time = date
+
+    val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+    val month = calendar.get(Calendar.MONTH) + 1    //Months start from 0
+    val year = calendar.get(Calendar.YEAR)
+
+    //Collect the province
+    var geoAddress by remember { mutableStateOf(createDummyAddress()) }
+
+    val onProvinceReceived: (Address) -> Unit = { result ->
+        geoAddress = result
+    }
+
+    val onError: (String) -> Unit = { errorMessage ->
+        Log.e("GeoCode","error: $errorMessage")
+    }
+
+    val context = LocalContext.current
+
+    //Load the provice using the geocoder
+    getProvinceFromGeoPoint(context, listItemData.location, onProvinceReceived, onError)
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { expanded.value= !expanded.value }
+            .clickable { expanded.value = !expanded.value }
             .clip(RoundedCornerShape(8.dp))
             .border(1.dp, borderColor)
             .padding(8.dp)
@@ -178,7 +159,7 @@ fun ListItem(
 
             // Campo data
             Text(
-                text = "date"/*SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(date)*/,
+                text = "Date: $dayOfMonth/$month/$year",
                 fontSize = 16.sp
             )
 
@@ -201,16 +182,28 @@ fun ListItem(
                 Image(
                     painter = rememberAsyncImagePainter(url),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxWidth().height(200.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
                     contentScale = ContentScale.Crop
                 )
             }
 
             // GeoPoint
-            Text(
-                text = "GeoPoint: ${listItemData.location}",
-                fontSize = 16.sp
-            )
+            Row {
+                Text(
+                    text = "Region: ${geoAddress.adminArea}",
+                    fontSize = 16.sp
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = "City: ${geoAddress.locality}",
+                    fontSize = 16.sp
+                )
+            }
+
         }
 
         // Aggiungi uno spazio vuoto per far sì che l'espansione funzioni correttamente
@@ -236,6 +229,7 @@ fun ListScreen(
             ListItem(
                 listItemData = listItem,
             )
+
             Divider() // Aggiungi una linea divisoria tra gli elementi della lista
 
             if (listItem == listItems.lastOrNull()) {
@@ -245,21 +239,53 @@ fun ListScreen(
     }
 }
 
-@Preview
-@Composable
-fun SpotterReportsPreview() {
-    SpotterReports(
-        navController = rememberNavController(),
-        onSignOut = {}
-    )
-}
-
-
-/*--------UTILITIES----------*/
+/***********UTILITIES***********/
 
 //This function is used to verify if the user reached the end of the list
 fun LazyListState.isScrolledToTheEnd(): Boolean {
     val totalItems = layoutInfo.totalItemsCount
     val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
     return totalItems > 0 && lastVisibleItem >= totalItems - 1
+}
+
+fun getProvinceFromGeoPoint(
+    context: Context,
+    location: GeoPoint,
+    onProvinceReceived: (Address) -> Unit,
+    onError: (String) -> Unit
+) {
+    GlobalScope.launch(Dispatchers.IO) {
+        val geocoder = Geocoder(context)
+        try {
+            val addresses: MutableList<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            if (addresses != null) {
+                if (addresses.isNotEmpty()) {
+                    val result = addresses[0]
+                    launch(Dispatchers.Main) {
+                        Log.i("geocoder","province: ${addresses[0]}")
+                        onProvinceReceived(result)
+                    }
+                } else {
+                    launch(Dispatchers.Main) {
+                        onError("Nessun risultato trovato per le coordinate: ${location.latitude}, ${location.longitude}")
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            launch(Dispatchers.Main) {
+                onError("Errore durante il geocoding inverso: ${e.message}")
+            }
+        }
+    }
+}
+
+
+// Funzione per creare un oggetto Address fittizio
+private fun createDummyAddress(): Address {
+    val address = Address(Locale.getDefault())
+    address.locality = "Dummy City"
+    address.adminArea = "Dummy Province"
+    address.countryName = "Dummy Country"
+    // Aggiungi altri campi di Address se necessario
+    return address
 }
