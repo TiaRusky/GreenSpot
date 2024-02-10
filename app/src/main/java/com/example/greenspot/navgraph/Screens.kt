@@ -12,7 +12,7 @@ enum class GreenspotScreen(){
     SignInCleaner,
     SignUpCleaner,
     CleanerProfile,
-    SpotterProfile
+    SpotterProfile,
 }
 
 const val ROOT = "root_graph"         //Identify the root navgraph (Main graph)
@@ -29,13 +29,15 @@ abstract  class BaseScreen(
 //A sealed class is used can have a set of limited objects, only defined at compiling time
 //Class to describe the possible screens for a logged spotter
 sealed class LoggedSpotterScreens(
-      title: String,
+    title: String,
     route: String,
     icon : ImageVector
 ) : BaseScreen(title,route,icon){
     object MyHome : LoggedSpotterScreens("My Profile", "mySpotterProfile", Icons.Default.Home)
     object LogOut : LoggedSpotterScreens("LogOut", "logout", Icons.Default.ExitToApp)
     object MyReports : LoggedSpotterScreens("My Reports", "myReports", Icons.Default.Info)
+    /*TO DO*/
+    object NewReport : LoggedSpotterScreens("New Report", "newReport", Icons.Default.Info)
 
 }
 

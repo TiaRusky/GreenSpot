@@ -109,7 +109,7 @@ fun ListItem(
     val isChecked = listItemData.validated
     val borderColor = if (isChecked) MaterialTheme.colorScheme.primary else Color.Gray
 
-    //Manage when the item is clicked to show more data
+    //Manage when the item is clicked to show more informations
     val expanded = remember { mutableStateOf(false) }
 
     //Collects infos about the date

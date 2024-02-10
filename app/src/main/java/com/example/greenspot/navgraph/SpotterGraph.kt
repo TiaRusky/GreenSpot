@@ -10,6 +10,7 @@ import androidx.navigation.navigation
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 import com.example.greenspot.presentation.spotter.SpotterProfileScreen
 import com.example.greenspot.presentation.spotter.SpotterReports
+import com.example.greenspot.presentation.spotter.AddReport
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.spotterGraph(
@@ -54,6 +55,18 @@ fun NavGraphBuilder.spotterGraph(
         }
 
 
+        composable(route = LoggedSpotterScreens.NewReport.route){
+            AddReport(
+                navController = navController,
+                onSignOut = {
+                    signOut(
+                        navController = navController,
+                        googleAuthClient = googleAuthClient,
+                        lifecycleScope = lifecycleScope,
+                        applicationContext = applicationContext
+                    )
+                })
+        }
     }
 }
 
