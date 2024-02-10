@@ -33,7 +33,7 @@ sealed class LoggedSpotterScreens(
     route: String,
     icon : ImageVector
 ) : BaseScreen(title,route,icon){
-    object MyHome : LoggedSpotterScreens("My Profile", "mySpotterProfile", Icons.Default.Home)
+    object MyHome : LoggedSpotterScreens("My Profile", "SpotterProfile", Icons.Default.Home)
     object LogOut : LoggedSpotterScreens("LogOut", "logout", Icons.Default.ExitToApp)
     object MyReports : LoggedSpotterScreens("My Reports", "myReports", Icons.Default.Info)
     /*TO DO*/
@@ -46,7 +46,7 @@ sealed class LoggedCleanerScreens(
      route: String,
      icon: ImageVector
 ) : BaseScreen(title,route,icon){
-    object MyHome : LoggedCleanerScreens("My Profile", "myCleanerProfile", Icons.Default.Home)
+    object MyHome : LoggedCleanerScreens("My Profile", "CleanerProfile", Icons.Default.Home)
     object ShowReports : LoggedCleanerScreens("Show reports","showReports", Icons.Default.Info)
     object LogOut : LoggedCleanerScreens("LogOut", "logout", Icons.Default.ExitToApp )
 }

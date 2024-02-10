@@ -7,22 +7,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.navgraph.BaseScreen
@@ -58,6 +50,11 @@ fun GreenspotBottomBar(
         backgroundColor = MaterialTheme.colorScheme.primary     //BottomNavigation color
     ) {
         items.forEach { item ->
+            //Load the start destination of the selected subgraph
+            val startDestinationGraphBackStackEntry = if(isSpotter) navController.getBackStackEntry(LoggedSpotterScreens.MyHome.route)
+                                                                        else navController.getBackStackEntry(LoggedCleanerScreens.MyHome.route)
+            val startDestinationId = startDestinationGraphBackStackEntry.destination.id
+
             BottomNavigationItem(
                 selected = item.title == selectedScreen,
                 onClick = {
@@ -65,7 +62,7 @@ fun GreenspotBottomBar(
                     if (item.title != selectedScreen) {
                         navController.navigate(item.route) {
                             //Clear the stack screen to keep the app light
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            popUpTo(startDestinationId) {
                             }
                             //Avoid multiple copy of destinations when selecting the same item
                             //So, there will be at most one copy of a given destination on the top of the back stack

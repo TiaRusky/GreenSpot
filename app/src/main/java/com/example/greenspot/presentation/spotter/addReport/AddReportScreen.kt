@@ -22,8 +22,7 @@ fun AddReport(
     navController: NavHostController,
     onSignOut: () -> Unit
 ){
-    val cameraPermissionState: PermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
-    val context = LocalContext.current
+    //val cameraPermissionState: PermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
 
     val requestPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
