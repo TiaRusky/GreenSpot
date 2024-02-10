@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -55,13 +57,6 @@ import coil.compose.AsyncImage
 import com.example.greenspot.R
 import com.example.greenspot.navgraph.LoggedSpotterScreens
 import com.example.greenspot.presentation.common.GreenspotBottomBar
-import com.example.greenspot.presentation.spotter.CameraScreen
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import java.io.File
-import java.util.Objects
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,6 +91,7 @@ fun SpotterProfileScreen(
             )
 
             SpotterProfileData(
+                navController = navController,
                 made = spotterReportsUiState.reportsMade,
                 resolved = spotterReportsUiState.resolvedReports
             )
@@ -152,7 +148,7 @@ fun SpotterProfileInfos(
 
 //Where will be inserted the info about the profile's activities in the app
 @Composable
-fun SpotterProfileData(made:Int,resolved:Int){
+fun SpotterProfileData(navController: NavHostController,made:Int,resolved:Int){
 
     Box(
         modifier = Modifier
@@ -167,7 +163,8 @@ fun SpotterProfileData(made:Int,resolved:Int){
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
@@ -193,7 +190,7 @@ fun SpotterProfileData(made:Int,resolved:Int){
                     modifier = Modifier
                         .height(10.dp)
                 )
-                Shake()
+                Shake(navController = navController)
             }
         }
     }
@@ -203,7 +200,7 @@ fun SpotterProfileData(made:Int,resolved:Int){
 
 
 @Composable
-fun Shake() {
+fun Shake(navController: NavHostController) {
 
     val context = LocalContext.current //for the current context
     var manager: SensorManager
@@ -220,26 +217,14 @@ fun Shake() {
 
     detector = ShakeDetector()
     detector.setOnShakeListener { shakesCount ->
-        if (shakesCount == 3) {
+        if (shakesCount == 1) {
             //TODO: andare in AddReportScreen
-            p.stampa() //test
+            navController.navigate(LoggedSpotterScreens.NewReport.route)
+            //p.stampa()
         }
     }
 
     manager.registerListener(detector, sensor, SensorManager.SENSOR_DELAY_UI)
-}
-
-@Composable
-private fun MainContent(
-    hasPermission: Boolean,
-    onRequestPermission: () -> Unit
-) {
-
-    if (hasPermission) {
-        CameraScreen()
-    } else {
-        NoPermissionScreen(onRequestPermission)
-    }
 }
 
 
@@ -274,5 +259,5 @@ fun SpotterProfileInfosPreview(){
 @Preview
 @Composable
 fun SpotterProfileDataPreview(){
-    SpotterProfileData(0,0)
+    SpotterProfileData(navController = rememberNavController(),0,0)
 }
