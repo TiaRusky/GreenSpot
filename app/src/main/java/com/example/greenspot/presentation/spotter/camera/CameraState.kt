@@ -1,4 +1,4 @@
-package com.example.greenspot.presentation.spotter
+package com.example.greenspot.presentation.spotter.camera
 
 import android.graphics.Bitmap
 

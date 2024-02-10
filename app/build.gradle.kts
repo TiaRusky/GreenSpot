@@ -114,6 +114,8 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.0-alpha07")
     implementation("androidx.camera:camera-extensions:1.3.0-alpha07")
     //implementation("com.google.firebase:firebase-storage:23.0.0")
+    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
 

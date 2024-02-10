@@ -1,4 +1,4 @@
-package com.example.greenspot.presentation.spotter
+package com.example.greenspot.presentation.spotter.addReport
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,6 +14,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +44,7 @@ fun AddReportTextComponent(value: String){
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
         ),
-        color = Color(0xff1d1617), //colorText
+        color = MaterialTheme.colorScheme.onBackground, //colorText
         textAlign = TextAlign.Center
     )
 }
@@ -90,7 +91,7 @@ fun InsertPhotoButton(value: String,
             .fillMaxWidth()
             .heightIn(48.dp),
         contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
         shape = RoundedCornerShape(50.dp),
     ){
         Box(
@@ -106,9 +107,14 @@ fun InsertPhotoButton(value: String,
             androidx.compose.material.Text(
                 text = value,
                 fontSize = 18.sp,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
             )
         }
     }
+}
+
+@Composable
+fun CancelButton(){
+
 }

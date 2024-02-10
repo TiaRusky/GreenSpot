@@ -9,8 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 import com.example.greenspot.presentation.spotter.SpotterProfileScreen
-import com.example.greenspot.presentation.spotter.SpotterReports
-import com.example.greenspot.presentation.spotter.AddReport
+import com.example.greenspot.presentation.spotter.reports.SpotterReports
+import com.example.greenspot.presentation.spotter.addReport.AddReport
 import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.spotterGraph(

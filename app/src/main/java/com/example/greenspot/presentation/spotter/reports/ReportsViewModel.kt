@@ -1,10 +1,6 @@
-package com.example.greenspot.presentation.spotter
+package com.example.greenspot.presentation.spotter.reports
 
 
-import android.content.Context
-import android.location.Address
-import android.location.Geocoder
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
@@ -19,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.util.Locale
 
 
 data class ListItemData(

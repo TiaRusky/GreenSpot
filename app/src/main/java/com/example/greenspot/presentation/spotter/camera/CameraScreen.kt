@@ -1,4 +1,4 @@
-package com.example.greenspot.presentation.spotter
+package com.example.greenspot.presentation.spotter.camera
 
 import android.widget.LinearLayout
 import androidx.camera.view.PreviewView
@@ -20,11 +20,9 @@ import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel

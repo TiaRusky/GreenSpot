@@ -1,12 +1,9 @@
-package com.example.greenspot.presentation.spotter
+package com.example.greenspot.presentation.spotter.camera
 
-import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.example.greenspot.presentation.spotter.camera.CameraState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-
 
 
 class CameraViewModel() : ViewModel() {

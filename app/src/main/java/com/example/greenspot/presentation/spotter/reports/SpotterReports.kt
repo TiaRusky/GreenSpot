@@ -1,4 +1,4 @@
-package com.example.greenspot.presentation.spotter
+package com.example.greenspot.presentation.spotter.reports
 
 
 import android.content.Context
