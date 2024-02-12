@@ -35,7 +35,6 @@ fun CameraScreen(
     CameraContent()
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraContent(){
     //implement the controller to control the camera
