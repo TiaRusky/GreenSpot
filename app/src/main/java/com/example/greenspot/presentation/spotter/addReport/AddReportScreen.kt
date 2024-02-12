@@ -24,9 +24,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
-import com.example.greenspot.presentation.spotter.camera.CameraScreen
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -41,7 +38,7 @@ fun AddReport(
 
     val context = LocalContext.current
     val file = context.createImageFile()                //The file that will contain the image
-    val uri = FileProvider.getUriForFile(           //The URI of the image
+    val uri = FileProvider.getUriForFile(               //The URI of the image
         Objects.requireNonNull(context),
         context.packageName + ".provider", file
     )
@@ -55,22 +52,27 @@ fun AddReport(
             capturedImageUri = uri
         }
 
-    //Here is defined the activity that requests the permissions to use the camera
-    val permissionLauncher  = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
+    //Here is defined the activity that requests the permissions to use the camera and location
+    val permissionsLauncher  = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions  ->
+        val cameraPermissionGranted = permissions[android.Manifest.permission.CAMERA] ?: false
+        val locationPermissionGranted = permissions[android.Manifest.permission.ACCESS_FINE_LOCATION] ?: false
+
+        if (cameraPermissionGranted && locationPermissionGranted) {
             Log.i("Permission","Granted")
-            cameraLauncher.launch(uri)          //Start the camera if the user gave the permissions
+            cameraLauncher.launch(uri)              //Start the camera if the user gave the permissions
         } else {
             Log.i("Permission","Denied")
-            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()     //Show a message when no permission
+            Toast.makeText(context, "Permissions Denied", Toast.LENGTH_SHORT).show()     //Show a message when no permission
         }
     }
 
     /*
     In case of multiple permissions:
-    val requestPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+    val permissionLauncher = rememberLauncherForActivityResult(
+    ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
         val allPermissionsGranted = permissions.all { it.value }
         if (allPermissionsGranted) {
             // Tutti i permessi sono stati concessi, esegui l'azione desiderata
@@ -101,17 +103,23 @@ fun AddReport(
             InsertPhotoButton(
                 value = "Capture Image",
                 onButtonClicked = {
-                    //TODO: funzione che attiva la camera
-                    //requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
-
-                    //Checks if there is the oermission to open the camera
-                    val permissionCheckResult =
+                    //Checks if there is the oermission to open the camera and access the location
+                    val cameraPermissionCheckResult =
                         ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA)
-                    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+
+                    val locationPermissionCheckResult =
+                        ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION)
+
+                    if (cameraPermissionCheckResult == PackageManager.PERMISSION_GRANTED
+                        && locationPermissionCheckResult == PackageManager.PERMISSION_GRANTED ) {
                         cameraLauncher.launch(uri)
-                    } else {
-                        // Request a permission
-                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                    } else {        //If no permissions , then ask for them
+                        permissionsLauncher.launch(
+                            arrayOf(
+                            android.Manifest.permission.CAMERA,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                            )
+                        )
                     }
                 },
             )

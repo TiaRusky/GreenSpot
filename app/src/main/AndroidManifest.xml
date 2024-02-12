@@ -2,7 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--Camera permission-->
     <uses-permission android:name="android.permission.CAMERA"/>
+    <!--Location permission-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- Request the hardware to use the camera -->
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
 
     <application

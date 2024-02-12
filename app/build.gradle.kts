@@ -92,7 +92,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-    //implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material3:material3-android:1.2.0-rc01")
 
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
@@ -113,7 +112,7 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.3.0-alpha07")
     implementation("androidx.camera:camera-view:1.3.0-alpha07")
     implementation("androidx.camera:camera-extensions:1.3.0-alpha07")
-    //implementation("com.google.firebase:firebase-storage:23.0.0")
+
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
@@ -121,5 +120,8 @@ dependencies {
 
     //Extra icon dependency
     implementation("androidx.compose.material:material-icons-extended")
+
+    //Position dependency
+    implementation("com.google.android.gms:play-services-location:18.0.0")
 
 }
