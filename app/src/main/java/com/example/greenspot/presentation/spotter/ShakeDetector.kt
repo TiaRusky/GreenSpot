@@ -29,8 +29,8 @@ class ShakeDetector : SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         val gX = (event!!.values[0] / SensorManager.GRAVITY_EARTH).toDouble()
-        val gY = (event!!.values[1] / SensorManager.GRAVITY_EARTH).toDouble()
-        val gZ = (event!!.values[2] / SensorManager.GRAVITY_EARTH).toDouble()
+        val gY = event!!.values[1] / SensorManager.GRAVITY_EARTH
+        val gZ = event!!.values[2] / SensorManager.GRAVITY_EARTH
 
         // gForce will be close to 1 when there is no movement.
         val gForce = sqrt(gX.pow(2) + gY.pow(2) + gZ.pow(2))

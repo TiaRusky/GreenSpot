@@ -8,8 +8,11 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,13 +20,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.greenspot.R
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -88,50 +94,60 @@ fun AddReport(
         )
     )})
      */
-
-    Scaffold(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-    ) { innerPadding ->
-        Column(
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(25.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Spacer(
             modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            AddReportTextComponent("Add a new report")
-            CaptionComponent("Add caption...")
-            InsertPhotoButton(
-                value = "Capture Image",
-                onButtonClicked = {
-                    //Checks if there is the oermission to open the camera and access the location
-                    val cameraPermissionCheckResult =
-                        ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA)
+                .height(20.dp)
+        )
 
-                    val locationPermissionCheckResult =
-                        ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        AddReportTextComponent("Add a new report")
 
-                    if (cameraPermissionCheckResult == PackageManager.PERMISSION_GRANTED
-                        && locationPermissionCheckResult == PackageManager.PERMISSION_GRANTED ) {
-                        cameraLauncher.launch(uri)
-                    } else {        //If no permissions , then ask for them
-                        permissionsLauncher.launch(
-                            arrayOf(
-                            android.Manifest.permission.CAMERA,
-                            android.Manifest.permission.ACCESS_FINE_LOCATION
-                            )
+        CaptionComponent("Add caption...")
+
+        Spacer(
+            modifier = Modifier
+                .height(10.dp)
+        )
+
+        InsertPhotoButtonComponent(
+            value = "Add Image",
+            onButtonClicked = {
+                //Checks if there is the oermission to open the camera and access the location
+                val cameraPermissionCheckResult =
+                    ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA)
+
+                val locationPermissionCheckResult =
+                    ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION)
+
+                if (cameraPermissionCheckResult == PackageManager.PERMISSION_GRANTED
+                    && locationPermissionCheckResult == PackageManager.PERMISSION_GRANTED ) {
+                    cameraLauncher.launch(uri)
+                } else {        //If no permissions , then ask for them
+                    permissionsLauncher.launch(
+                        arrayOf(
+                        android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
                         )
-                    }
-                },
+                    )
+                }
+            },
+            painterResource = painterResource(id = R.drawable.ic_camera)
+        )
+        //Sho the captured image
+        if (capturedImageUri.path?.isNotEmpty() == true) {
+            Image(
+                modifier = Modifier
+                    .padding(16.dp, 8.dp),
+                painter = rememberAsyncImagePainter(capturedImageUri),
+                contentDescription = null
             )
-            //Sho the captured image
-            if (capturedImageUri.path?.isNotEmpty() == true) {
-                Image(
-                    modifier = Modifier
-                        .padding(16.dp, 8.dp),
-                    painter = rememberAsyncImagePainter(capturedImageUri),
-                    contentDescription = null
-                )
-            }
         }
     }
 }

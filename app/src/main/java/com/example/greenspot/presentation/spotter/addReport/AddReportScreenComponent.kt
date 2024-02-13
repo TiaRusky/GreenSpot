@@ -1,12 +1,19 @@
 package com.example.greenspot.presentation.spotter.addReport
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -60,7 +67,8 @@ fun CaptionComponent(labelValue: String,
         mutableStateOf("")
     }
 
-    OutlinedTextField( //used to insert a field with border (field to insert the first name)
+    OutlinedTextField(
+        //used to insert a field with border (field to insert the first name)
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(4.dp)),
@@ -80,37 +88,32 @@ fun CaptionComponent(labelValue: String,
 }
 
 @Composable
-fun InsertPhotoButton(value: String,
-                    onButtonClicked : () -> Unit,
+fun InsertPhotoButtonComponent(value: String,
+                      onButtonClicked : () -> Unit,
+                      painterResource: Painter
 ) {
     Button(
         onClick = {
             onButtonClicked.invoke()
         },
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(48.dp),
-        contentPadding = PaddingValues(),
-        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-        shape = RoundedCornerShape(50.dp),
+        shape = RoundedCornerShape(40.dp)
     ){
-        Box(
+        Icon(
             modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(48.dp)
-                .background(
-                    brush = Brush.horizontalGradient(listOf(Color(0xFF9DCEFF), Color(0xFF92A3FD))),
-                    shape = RoundedCornerShape(50.dp)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            androidx.compose.material.Text(
-                text = value,
-                fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontWeight = FontWeight.Bold
-            )
-        }
+                .padding(8.dp)
+                .size(84.dp)
+                .clip(RoundedCornerShape(corner = CornerSize(16.dp))),
+            painter = painterResource,
+            contentDescription = "",
+            tint = Color.Unspecified
+        )
+        Text(
+            fontSize = 30.sp,
+            //color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = Color.White,
+            fontStyle = FontStyle.Normal,
+            text = value
+        )
     }
 }
 
