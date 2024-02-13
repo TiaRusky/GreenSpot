@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 class AddReportViewModel : ViewModel() {
 
     //This function save the image on firebase storage and then save the report in firestore
-    fun sendReport(imageUri: Uri, location: Location,description:String) {
+    fun sendReport(imageUri: Uri, location: Location,description:String,onSuccess:()->Unit, onFail:()->Unit) {
 
         viewModelScope.launch(Dispatchers.IO) {
             val storage = Firebase.storage
@@ -32,7 +32,7 @@ class AddReportViewModel : ViewModel() {
                     val imageUrl = uri.toString()
                     Log.i("loadImage","LoadImage:$imageUrl")
 
-                    loadReport(imageUrl,location,description)
+                    loadReport(imageUrl,location,description,onSuccess,onFail)
                 }
             }
         }
@@ -40,10 +40,10 @@ class AddReportViewModel : ViewModel() {
     }
 
     //Create the report document in the firestore database
-    private fun loadReport(imageUrl:String,location:Location,description: String){
+    private fun loadReport(imageUrl:String,location:Location,description: String,onSuccess: () -> Unit,onFail: () -> Unit){
         val db = Firebase.firestore
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
-        val reportRef = db.collection("reports").document(userId)
+        val reportRef = db.collection("reports")
 
         val data = hashMapOf(           //Prepare the data to save
             "date" to Timestamp.now(),
@@ -55,12 +55,14 @@ class AddReportViewModel : ViewModel() {
             "description" to description
         )
 
-        reportRef.set(data)
+        reportRef.add(data)
             .addOnSuccessListener {
                 Log.i("addReport","Report loaded on firestore with success!")
+                onSuccess()
             }
             .addOnFailureListener { e ->
                 Log.e("addReport","Failed firestore loading: $e")
+                onFail()
             }
     }
 

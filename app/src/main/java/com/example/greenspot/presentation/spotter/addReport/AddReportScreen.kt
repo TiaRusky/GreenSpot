@@ -35,7 +35,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.greenspot.R
+import com.example.greenspot.navgraph.GreenspotScreen
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.launch
 
 import java.io.File
 import java.text.SimpleDateFormat
@@ -88,8 +90,7 @@ fun AddReport(
 
         } else {
             Log.i("Permission", "Denied")
-            Toast.makeText(context, "Permissions Denied", Toast.LENGTH_SHORT)
-                .show()     //Show a message when no permission
+            Toast.makeText(context, "Permissions Denied", Toast.LENGTH_SHORT).show()     //Show a message when no permission
         }
     }
 
@@ -154,7 +155,28 @@ fun AddReport(
         val sendEnabled = (capturedImageUri != Uri.EMPTY) && (capturedLocation.toString() != "")
         Button(
             onClick ={
-                addReportViewModel.sendReport(capturedImageUri,capturedLocation, reportDescription.value)   //Send data to firebase
+                addReportViewModel.sendReport(      //Send data to firebase
+                    imageUri = capturedImageUri,
+                    location = capturedLocation,
+                    description = reportDescription.value,
+                    onSuccess = {                   //The function to call when the report is loaded correctly
+                        navController.navigate(GreenspotScreen.SpotterProfile.name){
+                            popUpTo(GreenspotScreen.SpotterProfile.name)
+                        }
+                        Toast.makeText(
+                            context,
+                            "Report uploaded",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    },
+                    onFail = {
+                        Toast.makeText(
+                            context,
+                            "Upload failed",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                )
             },
             enabled = sendEnabled
 
