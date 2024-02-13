@@ -68,26 +68,6 @@ fun AddReport(
         }
     }
 
-    /*
-    In case of multiple permissions:
-    val permissionLauncher = rememberLauncherForActivityResult(
-    ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        val allPermissionsGranted = permissions.all { it.value }
-        if (allPermissionsGranted) {
-            // Tutti i permessi sono stati concessi, esegui l'azione desiderata
-        } else {
-            // Almeno un permesso è stato negato, gestisci di conseguenza
-        }
-    }
-
-    Button(onClick = { requestPermissionLauncher.launch(
-        arrayOf(
-            android.Manifest.permission.CAMERA,
-             Aggiungi altri permessi qui
-        )
-    )})
-     */
 
     Scaffold(
         modifier = Modifier
@@ -123,7 +103,7 @@ fun AddReport(
                     }
                 },
             )
-            //Sho the captured image
+            //Show the captured image
             if (capturedImageUri.path?.isNotEmpty() == true) {
                 Image(
                     modifier = Modifier
