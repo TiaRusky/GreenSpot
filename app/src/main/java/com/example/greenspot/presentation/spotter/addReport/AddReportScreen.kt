@@ -112,11 +112,6 @@ fun AddReport(
             reportDescription.value = newValue
         }
 
-        Spacer(
-            modifier = Modifier
-                .height(10.dp)
-        )
-
         InsertPhotoButtonComponent(
             value = "Add Image",
             onButtonClicked = {

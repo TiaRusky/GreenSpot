@@ -16,6 +16,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
@@ -59,7 +60,7 @@ fun NormalTextComponent(value:String) {
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
         ),
-        color = Color(0xff1d1617), //colorText
+        color = androidx.compose.material3.MaterialTheme.colorScheme.tertiary, //colorText
         textAlign = TextAlign.Center
     )
 }
@@ -77,7 +78,7 @@ fun HeadingTextComponent(value:String) {
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
         ),
-        color = Color(0xff1d1617), //colorText
+        color = androidx.compose.material3.MaterialTheme.colorScheme.tertiary, //colorText
         textAlign = TextAlign.Center
     )
 }
@@ -207,7 +208,7 @@ fun ButtonComponent(value: String,
                 .fillMaxWidth()
                 .heightIn(48.dp)
                 .background(
-                    brush = Brush.horizontalGradient(listOf(Color(0xFF9DCEFF), Color(0xFF92A3FD))),
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                     shape = RoundedCornerShape(50.dp)
                 ),
             contentAlignment = Alignment.Center
@@ -269,7 +270,7 @@ fun ClickableLoginTextComponent(tryToLogin:Boolean = true, onTextSelected: () ->
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(Color(0xFF92A3FD))) {
+        withStyle(style = SpanStyle(androidx.compose.material3.MaterialTheme.colorScheme.primary)) {
             pushStringAnnotation(tag = loginText, annotation = loginText)
             append(loginText)
         }
@@ -303,7 +304,7 @@ fun UnderLinedTextComponent(value: String) {
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
         ),
-        color = Color(0xFF7B6F72),
+        color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center,
         textDecoration = TextDecoration.Underline
     )

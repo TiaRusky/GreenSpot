@@ -43,58 +43,53 @@ fun WelcomeTextComponent(value:String) {
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
         ),
-        color = Color(0xff1d1617), //colorText
+        color = androidx.compose.material3.MaterialTheme.colorScheme.tertiary, //colorText
         textAlign = TextAlign.Center
     )
 }
 
 @Composable
 fun ButtonComponent(onClick: () -> Unit, value: String, painterResource: Painter) {
-    Surface(
-        border = BorderStroke(width = 1.dp, color = Color.LightGray),
-        color = MaterialTheme.colors.surface,
-        shape = RoundedCornerShape(4.dp)
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(48.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary, contentColor = Color.White),
+        contentPadding = PaddingValues(),
+
     ) {
-        Button(
-            onClick = onClick,
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(48.dp),
-            contentPadding = PaddingValues(),
-
+                .padding(
+                    start = 12.dp,
+                    end = 16.dp,
+                    top = 12.dp,
+                    bottom = 12.dp
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Row(
+
+            //used to insert the icons
+            Icon(
+                painter = painterResource,
+                contentDescription = "Google button",
+                tint = Color.Unspecified
+            )
+
+            Spacer(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 12.dp,
-                        end = 16.dp,
-                        top = 12.dp,
-                        bottom = 12.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
+                    .width(8.dp)
+            )
 
-                //used to insert the icons
-                Icon(
-                    painter = painterResource,
-                    contentDescription = "Google button",
-                    tint = Color.Unspecified
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .width(8.dp)
-                )
-
-                Text(
-                    text = value,
-                    fontSize = 18.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            Text(
+                text = value,
+                fontSize = 18.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

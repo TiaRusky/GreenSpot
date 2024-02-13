@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
@@ -38,7 +39,7 @@ fun AddReportTextComponent(value: String) {
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
         ),
-        color = MaterialTheme.colorScheme.onBackground, //colorText
+        color = MaterialTheme.colorScheme.tertiary, //colorText
         textAlign = TextAlign.Center
     )
 }
@@ -82,10 +83,14 @@ fun InsertPhotoButtonComponent(
     painterResource: Painter
 ) {
     Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(48.dp),
         onClick = {
             onButtonClicked.invoke()
         },
-        shape = RoundedCornerShape(40.dp)
+        shape = RoundedCornerShape(20.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary, contentColor = Color.White)
     ) {
         Icon(
             modifier = Modifier
@@ -98,7 +103,7 @@ fun InsertPhotoButtonComponent(
         )
         Text(
             fontSize = 20.sp,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.background,
             fontStyle = FontStyle.Normal,
             text = value
         )

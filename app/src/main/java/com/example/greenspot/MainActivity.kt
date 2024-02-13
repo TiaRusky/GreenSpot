@@ -8,9 +8,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
-import com.example.greenspot.ui.theme.GreenspotTheme
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.compose.GreenspotTheme
 import com.example.greenspot.navgraph.SetupNavGraph
 import com.example.greenspot.presentation.sign_in.GoogleAuthUIClient
 
