@@ -3,6 +3,7 @@ package com.example.greenspot.presentation.spotter
 
 import android.content.Context
 import android.hardware.Sensor
+import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -203,18 +205,26 @@ fun Shake(navController: NavHostController) {
     }
 
     sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
+    detector = remember { ShakeDetector() }
 
-    detector = ShakeDetector()
-    detector.setOnShakeListener { shakesCount ->
-        if (shakesCount == 1) {
-            //TODO: andare in AddReportScreen
-            navController.navigate(LoggedSpotterScreens.NewReport.route)
-            //p.stampa()
+
+    DisposableEffect(key1 = detector) {
+        detector.setOnShakeListener { shakesCount ->
+            if (shakesCount == 1) {
+                navController.navigate(LoggedSpotterScreens.NewReport.route)
+            }
+        }
+        manager.registerListener(detector, sensor, SensorManager.SENSOR_DELAY_UI)
+
+        onDispose {
+            manager.unregisterListener(detector)
         }
     }
 
-    manager.registerListener(detector, sensor, SensorManager.SENSOR_DELAY_UI)
+
+
 }
+
 
 
 @Preview
