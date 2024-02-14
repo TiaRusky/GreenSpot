@@ -89,7 +89,7 @@ fun GridItem(text: String, number: Int, painterResource: Painter) {
                 Text(
                     text = "$text: $number",
                     fontSize = 30.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = MaterialTheme.colorScheme.background,
                     fontStyle = FontStyle.Normal,
                 )
             }

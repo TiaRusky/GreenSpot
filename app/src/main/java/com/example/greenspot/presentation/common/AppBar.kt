@@ -46,8 +46,8 @@ fun GreenspotBottomBar(
 
 
     BottomNavigation(
-        modifier = Modifier.height(40.dp),
-        backgroundColor = MaterialTheme.colorScheme.primary     //BottomNavigation color
+        modifier = Modifier.height(50.dp),
+        backgroundColor = MaterialTheme.colorScheme.background   //BottomNavigation color
     ) {
         items.forEach { item ->
             //Load the start destination of the selected subgraph
@@ -81,11 +81,11 @@ fun GreenspotBottomBar(
                             imageVector = item.icon,
                             contentDescription = item.title,
                             tint = if (item.title == selectedScreen) {  //Make visible the current page in the appbar
-                                Color.Black
+                                MaterialTheme.colorScheme.primary
                             } else {
-                                Color.Gray
+                                MaterialTheme.colorScheme.outline
                             },
-                            modifier = Modifier.size(28.dp)
+                            modifier = Modifier.size(30.dp)
                         )
 
                         /*Text(
@@ -118,7 +118,7 @@ fun GreenspotBottomBar(
                         imageVector = LoggedSpotterScreens.LogOut.icon,
                         contentDescription = LoggedSpotterScreens.LogOut.title,
                         tint = Color.Gray,
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(30.dp)
                     )
 
                     /*Text(

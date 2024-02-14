@@ -89,14 +89,12 @@ fun InsertPhotoButtonComponent(
         onClick = {
             onButtonClicked.invoke()
         },
-        shape = RoundedCornerShape(20.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary, contentColor = Color.White)
     ) {
         Icon(
             modifier = Modifier
                 .padding(8.dp)
-                .size(40.dp)
-                .clip(RoundedCornerShape(corner = CornerSize(16.dp))),
+                .size(50.dp),
             painter = painterResource,
             contentDescription = "",
             tint = Color.Unspecified

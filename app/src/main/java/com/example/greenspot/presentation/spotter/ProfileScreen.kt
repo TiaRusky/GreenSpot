@@ -143,7 +143,8 @@ fun SpotterProfileData(navController: NavHostController,made:Int,resolved:Int){
 
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Surface(
