@@ -3,6 +3,7 @@ package com.example.greenspot.presentation.spotter.addReport
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Address
 import android.location.Location
 import android.net.Uri
 import android.util.Log
@@ -19,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -40,7 +39,10 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.greenspot.R
 import com.example.greenspot.navgraph.GreenspotScreen
+import com.example.greenspot.presentation.spotter.reports.createDummyAddress
+import com.example.greenspot.presentation.spotter.reports.getProvinceFromGeoPoint
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.launch
 
 import java.io.File
@@ -62,6 +64,8 @@ fun AddReport(
         context.packageName + ".provider", file
     )
 
+
+    /********The data to store**********/
     var reportDescription = remember {           //used to remember the last value inserted in the field
         mutableStateOf("")
     }
@@ -78,6 +82,15 @@ fun AddReport(
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
             capturedImageUri = uri
         }
+
+    var geoAddress by remember { mutableStateOf(createDummyAddress()) }     //here will be stored info about the location
+
+    val onProvinceReceived: (Address) -> Unit = { result ->
+        geoAddress = result
+    }
+
+
+
 
     //Here is defined the activity that requests the permissions to use the camera and location
     val permissionsLauncher = rememberLauncherForActivityResult(
@@ -135,6 +148,8 @@ fun AddReport(
                 ) {
                     cameraLauncher.launch(uri)              //Get the pic
                     getLocation(context){location->            //Get the current location
+                        val geoPoint = GeoPoint(location.latitude, location.longitude)
+                        getProvinceFromGeoPoint(context, geoPoint , onProvinceReceived) {}       //Get the city
                         capturedLocation = location
                     }
 
@@ -151,7 +166,7 @@ fun AddReport(
         )
 
         //Checks if all the important data are ready to send
-        val sendEnabled = (capturedImageUri != Uri.EMPTY) && (capturedLocation.toString() != "")
+        val sendEnabled = (capturedImageUri != Uri.EMPTY) && (capturedLocation.toString() != "") && (geoAddress.locality != "Dummy City")
         Button(
             modifier = Modifier
                 .fillMaxWidth()
@@ -161,6 +176,8 @@ fun AddReport(
                     imageUri = capturedImageUri,
                     location = capturedLocation,
                     description = reportDescription.value,
+                    city = geoAddress.locality,
+                    region = geoAddress.adminArea,
                     onSuccess = {                   //The function to call when the report is loaded correctly
                         navController.navigate(GreenspotScreen.SpotterProfile.name){
                             popUpTo(GreenspotScreen.SpotterProfile.name)

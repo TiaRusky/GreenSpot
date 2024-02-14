@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 class AddReportViewModel : ViewModel() {
 
     //This function save the image on firebase storage and then save the report in firestore
-    fun sendReport(imageUri: Uri, location: Location,description:String,onSuccess:()->Unit, onFail:()->Unit) {
+    fun sendReport(imageUri: Uri, location: Location,description:String,city:String,region:String,onSuccess:()->Unit, onFail:()->Unit) {
 
         viewModelScope.launch(Dispatchers.IO) {
             val storage = Firebase.storage
@@ -32,7 +32,7 @@ class AddReportViewModel : ViewModel() {
                     val imageUrl = uri.toString()
                     Log.i("loadImage","LoadImage:$imageUrl")
 
-                    loadReport(imageUrl,location,description,onSuccess,onFail)
+                    loadReport(imageUrl,location,description,city,region,onSuccess,onFail)
                 }
             }
         }
@@ -40,7 +40,7 @@ class AddReportViewModel : ViewModel() {
     }
 
     //Create the report document in the firestore database
-    private fun loadReport(imageUrl:String,location:Location,description: String,onSuccess: () -> Unit,onFail: () -> Unit){
+    private fun loadReport(imageUrl:String,location:Location,description: String,city:String,region:String,onSuccess: () -> Unit,onFail: () -> Unit){
         val db = Firebase.firestore
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         val reportRef = db.collection("reports")
@@ -52,7 +52,9 @@ class AddReportViewModel : ViewModel() {
             "resolved" to false,
             "spotterId" to userId,
             "votes" to 0,
-            "description" to description
+            "description" to description,
+            "city" to city,
+            "region" to region
         )
 
         reportRef.add(data)

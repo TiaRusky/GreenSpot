@@ -39,7 +39,10 @@ class CleanerDataViewModel: ViewModel() {
                 }
             }
         }
+    }
 
+    //This function is used to loads the reports in one city
+    fun getReportsFromCity(city:String){
 
     }
 }

@@ -4,6 +4,7 @@ package com.example.greenspot.presentation.spotter.reports
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -121,21 +122,6 @@ fun ListItem(
     val month = calendar.get(Calendar.MONTH) + 1    //Months start from 0
     val year = calendar.get(Calendar.YEAR)
 
-    //Collect the province
-    var geoAddress by remember { mutableStateOf(createDummyAddress()) }
-
-    val onProvinceReceived: (Address) -> Unit = { result ->
-        geoAddress = result
-    }
-
-    val onError: (String) -> Unit = { errorMessage ->
-        Log.e("GeoCode","error: $errorMessage")
-    }
-
-    val context = LocalContext.current
-
-    //Load the provice using the geocoder
-    getProvinceFromGeoPoint(context, listItemData.location, onProvinceReceived, onError)
 
     Column(
         modifier = Modifier
@@ -192,15 +178,21 @@ fun ListItem(
             // GeoPoint
             Row {
                 Text(
-                    text = "Region: ${geoAddress.adminArea}",
+                    text = "Region: ${listItemData.region}",
                     fontSize = 16.sp
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = "City: ${geoAddress.locality}",
+                    text = "City: ${listItemData.city}",
                     fontSize = 16.sp
+                )
+            }
+
+            Row {
+                Text(
+                    text = "Description: ${listItemData.description}"
                 )
             }
 
@@ -281,7 +273,7 @@ fun getProvinceFromGeoPoint(
 
 
 // Funzione per creare un oggetto Address fittizio
-private fun createDummyAddress(): Address {
+fun createDummyAddress(): Address {
     val address = Address(Locale.getDefault())
     address.locality = "Dummy City"
     address.adminArea = "Dummy Province"

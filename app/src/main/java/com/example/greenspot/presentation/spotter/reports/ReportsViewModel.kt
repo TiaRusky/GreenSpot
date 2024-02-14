@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 
+//The report data
 data class ListItemData(
     val id: String,
     val date: Timestamp,
@@ -24,6 +25,9 @@ data class ListItemData(
     val location: GeoPoint,
     val imageUrl: String,
     val votes: Int,
+    val city: String,
+    val region: String,
+    val description: String
 )
 
 
@@ -84,7 +88,10 @@ class ReportsViewModel : ViewModel() {
                 validated = data["resolved"].toString().toBoolean(),
                 location = data["position"] as GeoPoint,
                 imageUrl = data["imageURL"].toString(),
-                votes = (data["votes"].toString()).toInt()
+                votes = (data["votes"].toString()).toInt(),
+                city = data["city"].toString(),
+                region = data["region"].toString(),
+                description = data["description"].toString()
             )
 
             newItems += report
