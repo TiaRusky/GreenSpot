@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,19 +22,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.navgraph.LoggedCleanerScreens
 
 import com.example.greenspot.presentation.common.GreenspotBottomBar
+import com.example.greenspot.presentation.spotter.reports.ListScreen
 import com.example.greenspot.presentation.spotter.reports.createDummyAddress
 
 @Composable
 fun ShowReportScreen(
     navController: NavHostController,
     onSignOut: () -> Unit,
+    cleanerViewModel : CleanerDataViewModel = viewModel(),
 ) {
+
+    val listItems by cleanerViewModel.listItems.collectAsState()        //The reports loaded
 
     Scaffold(
         bottomBar = {
@@ -51,7 +57,15 @@ fun ShowReportScreen(
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            SearchBar(onSearch = {})
+            SearchBar(onSearch = {city->
+                cleanerViewModel.searchReports(city)
+            })
+
+            ListScreen(
+                modifier = Modifier.padding(innerPadding),
+                listItems = listItems,
+                {}
+            )
         }
     }
 }

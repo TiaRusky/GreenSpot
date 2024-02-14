@@ -82,6 +82,7 @@ class ReportsViewModel : ViewModel() {
 
         for (document in documents) {
             val data = document.data
+
             val report = ListItemData(
                 id = "",
                 date = data["date"] as Timestamp,
