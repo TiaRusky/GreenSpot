@@ -36,7 +36,6 @@ sealed class LoggedSpotterScreens(
     object MyHome : LoggedSpotterScreens("My Profile", "SpotterProfile", Icons.Default.Home)
     object LogOut : LoggedSpotterScreens("LogOut", "logout", Icons.Default.ExitToApp)
     object MyReports : LoggedSpotterScreens("My Reports", "myReports", Icons.Default.Info)
-    /*TO DO*/
     object NewReport : LoggedSpotterScreens("New Report", "newReport", Icons.Default.Info)
 
 }

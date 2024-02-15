@@ -45,9 +45,9 @@ fun NavGraphBuilder.cleanerGraph(
 private fun logout(applicationContext: Context, loginCleanerViewModel : LoginCleanerViewModel, navController :NavHostController){
     loginCleanerViewModel.logout(applicationContext)
     navController.navigate(GreenspotScreen.SignIn.name){   //Once logged out return to login screen
-        popUpTo(GreenspotScreen.SignIn.name){               //Clear the screen stack to lighten the app
-            inclusive = true
-        }
+        //popUpTo(GreenspotScreen.SignIn.name){                         //Clear the screen stack to lighten the app
+         //   inclusive = false
+        //}
         //Clear the state of Logged Composable
         restoreState = true
     }
