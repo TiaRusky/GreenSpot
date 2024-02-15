@@ -42,9 +42,8 @@ fun GreenspotBottomBar(
             LoggedCleanerScreens.ShowReports
         )
     }
+
     //List of items that will compose the bottomNavigationBar
-
-
     BottomNavigation(
         modifier = Modifier.height(50.dp),
         backgroundColor = MaterialTheme.colorScheme.background   //BottomNavigation color
