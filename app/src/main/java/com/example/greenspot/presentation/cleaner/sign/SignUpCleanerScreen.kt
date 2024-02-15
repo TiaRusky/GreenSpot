@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,19 +36,21 @@ fun SignUpCleanerScreen(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
 
         Surface (
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(28.dp)
         ){
             Column (
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Box(
@@ -101,7 +105,7 @@ fun SignUpCleanerScreen(
 
                 Spacer(
                     modifier = Modifier
-                        .height(100.dp)
+                        .height(15.dp)
                 )
 
                 //register button
@@ -131,10 +135,11 @@ fun SignUpCleanerScreen(
 
 }
 
-/*@Preview
+@Preview
 @Composable
 fun DefaultPreviewOfSignUpCleanerScreen(){
     SignUpCleanerScreen(
-        navController = rememberNavController()
+        navController = rememberNavController(),
+        applicationContext = LocalContext.current
     )
-}*/
+}

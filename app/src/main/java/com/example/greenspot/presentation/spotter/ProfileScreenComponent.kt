@@ -77,7 +77,7 @@ fun GridItem(text: String, number: Int, painterResource: Painter) {
                 contentDescription = "",
                 modifier = Modifier
                     .padding(8.dp)
-                    .size(84.dp)
+                    .size(55.dp)
                     .clip(RoundedCornerShape(corner = CornerSize(16.dp)))
             )
             Column(
@@ -88,8 +88,8 @@ fun GridItem(text: String, number: Int, painterResource: Painter) {
             ){
                 Text(
                     text = "$text: $number",
-                    fontSize = 30.sp,
-                    color = MaterialTheme.colorScheme.background,
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontStyle = FontStyle.Normal,
                 )
             }
@@ -112,7 +112,7 @@ fun ShakePhoneIconComponent(painterResource: Painter){
                 contentDescription = "",
                 modifier = Modifier
                     .padding(8.dp)
-                    .size(140.dp)
+                    .size(90.dp)
                     .offset(animateShakeEffect(isShaking).value.dp),
                 colorFilter = ColorFilter.tint(Color.Gray.copy(alpha = 0.6f))
             )
@@ -123,7 +123,7 @@ fun ShakePhoneIconComponent(painterResource: Painter){
             text = "Shake the phone to public a new post",
             textAlign = TextAlign.Center,
             fontSize = 20.sp,
-            color = Color.Gray.copy(alpha = 0.6f)
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

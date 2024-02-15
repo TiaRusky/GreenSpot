@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,18 +36,20 @@ fun LoginCleanerScreen(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Surface (
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(28.dp)
         ){
             Column(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Box(
@@ -91,15 +94,15 @@ fun LoginCleanerScreen(
 
                 Spacer(
                     modifier = Modifier
-                        .height(10.dp)
+                        .height(15.dp)
                 )
 
-                UnderLinedTextComponent(value = "Forgot your password")
+                //UnderLinedTextComponent(value = "Forgot your password")
 
-                Spacer(
+                /*Spacer(
                     modifier = Modifier
                         .height(20.dp)
-                )
+                )*/
 
                 //login button
                 ButtonComponent(
@@ -115,7 +118,7 @@ fun LoginCleanerScreen(
                 ClickableLoginTextComponent(tryToLogin = false, onTextSelected = {
                     navController.navigate(GreenspotScreen.SignUpCleaner.name){
                         //Remove the login screen to move to the registration screen
-                        popUpTo(navController.graph.findStartDestination().id)
+                        //popUpTo(navController.graph.findStartDestination().id)
                     }
                 })
             }
@@ -135,6 +138,6 @@ fun DefaultPreviewOfLoginCleanerScreen(){
     LoginCleanerScreen(
         navController = rememberNavController(),
         applicationContext = LocalContext.current,
-        
+
     )
 }
