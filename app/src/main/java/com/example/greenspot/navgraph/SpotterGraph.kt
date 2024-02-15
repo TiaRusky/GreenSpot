@@ -79,7 +79,7 @@ private fun signOut(
         ).show()
     }.invokeOnCompletion {
         navController.navigate(GreenspotScreen.SignIn.name){//Once logged out return to login screen
-            popUpTo(GreenspotScreen.SignIn.name){//Clear the screen stack to lighten the app
+           popUpTo(GreenspotScreen.SignIn.name){//Clear the screen stack to lighten the app
                 inclusive = true
             }
             //Clear the state of Logged Composable

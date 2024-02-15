@@ -66,7 +66,8 @@ class CleanerDataViewModel : ViewModel() {
         val fieldName = "city"
         var query = db.collection("reports")
             .orderBy("votes")
-            .whereEqualTo(fieldName, city) //Loads the reports made by the current user
+            .whereEqualTo(fieldName, city)              //Loads the reports made by the current user
+            .whereEqualTo("resolved",false)   //Not load the resolved reports
 
         val documents = query.get().await()
 

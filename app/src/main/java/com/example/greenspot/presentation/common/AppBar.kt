@@ -50,11 +50,6 @@ fun GreenspotBottomBar(
         backgroundColor = MaterialTheme.colorScheme.background   //BottomNavigation color
     ) {
         items.forEach { item ->
-            //Load the start destination of the selected subgraph
-            val startDestinationGraphBackStackEntry = if(isSpotter) navController.getBackStackEntry(LoggedSpotterScreens.MyHome.route)
-                                                                        else navController.getBackStackEntry(LoggedCleanerScreens.MyHome.route)
-            val startDestinationId = startDestinationGraphBackStackEntry.destination.id
-
             BottomNavigationItem(
                 selected = item.title == selectedScreen,
                 onClick = {
@@ -62,8 +57,17 @@ fun GreenspotBottomBar(
                     if (item.title != selectedScreen) {
                         navController.navigate(item.route) {
                             //Clear the stack screen to keep the app light
-                            popUpTo(startDestinationId) {
+                            if(isSpotter){
+                                popUpTo(LoggedSpotterScreens.MyHome.route) {
+                                    inclusive  = false
+                                }
                             }
+                            else{
+                                popUpTo(LoggedCleanerScreens.MyHome.route) {
+                                    inclusive  = false
+                                }
+                            }
+
                             //Avoid multiple copy of destinations when selecting the same item
                             //So, there will be at most one copy of a given destination on the top of the back stack
                             launchSingleTop = true
@@ -88,19 +92,6 @@ fun GreenspotBottomBar(
                             modifier = Modifier.size(30.dp)
                         )
 
-                        /*Text(
-                            text = item.title,
-                            color = if (item.title == selectedScreen) {
-                                Color.Black
-                            } else {
-                                Color.Gray
-                            },
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            fontSize = 9.sp
-                        )*/
-
                     }
                 }
             )
@@ -120,16 +111,6 @@ fun GreenspotBottomBar(
                         tint = Color.Gray,
                         modifier = Modifier.size(30.dp)
                     )
-
-                    /*Text(
-                        text = LoggedSpotterScreens.LogOut.title,
-                        color = Color.Gray,
-                        textAlign = TextAlign.Center,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontSize = 9.sp
-                    )*/
-
 
                 }
             }

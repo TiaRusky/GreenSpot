@@ -132,7 +132,9 @@ fun NavGraphBuilder.loginGraph(
                             Toast.LENGTH_LONG
                         ).show()
                     }.invokeOnCompletion {
-                        navController.popBackStack()
+                        navController.navigate(GreenspotScreen.SignIn.name){
+                            popUpTo(GreenspotScreen.SignIn.name)
+                        }
                     }
                 }
             )
@@ -152,7 +154,9 @@ fun NavGraphBuilder.loginGraph(
                             Toast.LENGTH_LONG
                         ).show()
                     }.invokeOnCompletion {
-                        navController.popBackStack()
+                        navController.navigate(GreenspotScreen.SignIn.name){
+                            popUpTo(GreenspotScreen.SignIn.name)
+                        }
                     }
                 },
             )
