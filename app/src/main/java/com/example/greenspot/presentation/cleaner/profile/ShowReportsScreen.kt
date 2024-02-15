@@ -20,12 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.greenspot.R
 import com.example.greenspot.navgraph.LoggedCleanerScreens
 
 import com.example.greenspot.presentation.common.GreenspotBottomBar
@@ -96,17 +98,16 @@ fun SearchBar(
                 .background(MaterialTheme.colorScheme.primaryContainer)
         )
 
-        Button(
-            onClick = {
+        SearchButtonComponent(
+            value = "Search",
+            onButtonClicked = {
                 isSearching = !isSearching
                 if (!isSearching) {
                     onSearch(searchText)
                 }
             },
-
-        ) {
-            Text(text = "Search")
-        }
+            painterResource = painterResource(id = R.drawable.ic_search)
+        )
     }
 
 }
