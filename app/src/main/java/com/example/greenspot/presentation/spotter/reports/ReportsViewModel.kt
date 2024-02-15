@@ -27,7 +27,8 @@ data class ListItemData(
     val votes: Int,
     val city: String,
     val region: String,
-    val description: String
+    val description: String,
+    val resolvedByName: String?,
 )
 
 
@@ -84,7 +85,7 @@ class ReportsViewModel : ViewModel() {
             val data = document.data
 
             val report = ListItemData(
-                id = "",
+                id = document.id,
                 date = data["date"] as Timestamp,
                 validated = data["resolved"].toString().toBoolean(),
                 location = data["position"] as GeoPoint,
@@ -92,7 +93,8 @@ class ReportsViewModel : ViewModel() {
                 votes = (data["votes"].toString()).toInt(),
                 city = data["city"].toString(),
                 region = data["region"].toString(),
-                description = data["description"].toString()
+                description = data["description"].toString(),
+                resolvedByName = data["resolvedByName"]?.toString() ?: null     //If it is not resolved
             )
 
             newItems += report
