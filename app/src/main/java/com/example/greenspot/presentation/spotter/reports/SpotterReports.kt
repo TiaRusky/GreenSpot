@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -94,7 +96,9 @@ fun SpotterReports(
         ListScreen(
             modifier = Modifier.padding(innerPadding),
             listItems = listItems,
-            onLoadMoreItems = loadMoreItems
+            onLoadMoreItems = loadMoreItems,
+            isSpotter = true,
+            resolveReport = {}      //Only needed by the cleaner
         )
 
     }
@@ -103,6 +107,8 @@ fun SpotterReports(
 @Composable
 fun ListItem(
     listItemData: ListItemData,
+    isSpotter: Boolean,
+    resolveReport : (String)->Unit,
 ) {
     val isChecked = listItemData.validated
     val borderColor = if (isChecked) MaterialTheme.colorScheme.primary else Color.Gray
@@ -184,10 +190,40 @@ fun ListItem(
                 )
             }
 
+            Spacer(modifier = Modifier.width(6.dp))
+
             Row {
                 Text(
                     text = "Description: ${listItemData.description}"
                 )
+            }
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            if(listItemData.validated && listItemData.resolvedByName != null){
+                Row {
+                    Text(
+                        text = "Resolved By: ${listItemData.resolvedByName}"
+                    )
+                }
+            }
+
+            //Show the resolve reports button for the cleaner
+            if(!isSpotter && !listItemData.validated){
+
+                Spacer(modifier = Modifier.width(6.dp))
+
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    Button(
+                        onClick = { resolveReport(listItemData.id) },
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    ) {
+                        Text(text = "Resolve")
+                    }
+                }
             }
 
         }
@@ -203,7 +239,9 @@ fun ListItem(
 fun ListScreen(
     modifier: Modifier,
     listItems: List<ListItemData>,
-    onLoadMoreItems: () -> Unit
+    onLoadMoreItems: () -> Unit,
+    isSpotter: Boolean,
+    resolveReport:(String)->Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -214,6 +252,8 @@ fun ListScreen(
         items(items = listItems) { listItem ->
             ListItem(
                 listItemData = listItem,
+                isSpotter = isSpotter,
+                resolveReport = resolveReport
             )
 
             Divider() // Aggiungi una linea divisoria tra gli elementi della lista
