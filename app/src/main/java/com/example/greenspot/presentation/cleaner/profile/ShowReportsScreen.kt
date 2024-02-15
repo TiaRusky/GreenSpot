@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
@@ -14,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,13 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.greenspot.R
 import com.example.greenspot.navgraph.LoggedCleanerScreens
 
 import com.example.greenspot.presentation.common.GreenspotBottomBar
@@ -42,7 +45,7 @@ import kotlinx.coroutines.launch
 fun ShowReportScreen(
     navController: NavHostController,
     onSignOut: () -> Unit,
-    cleanerViewModel : CleanerDataViewModel = viewModel(),
+    cleanerViewModel: CleanerDataViewModel = viewModel(),
 ) {
     val context = LocalContext.current
 
@@ -51,7 +54,7 @@ fun ShowReportScreen(
     val coroutineScope = rememberCoroutineScope()
 
     //Toast message for when the report is cleaned
-    val onValidated: ()->Unit = {
+    val onValidated: () -> Unit = {
         coroutineScope.launch {
             Toast.makeText(
                 context,
@@ -62,13 +65,13 @@ fun ShowReportScreen(
     }
 
     //The function needed to resolve a report
-    val resolveReport :(String)->Unit = {reportId->
-        cleanerViewModel.resolveReport(reportId,onValidated)
+    val resolveReport: (String) -> Unit = { reportId ->
+        cleanerViewModel.resolveReport(reportId, onValidated)
     }
 
 
     //The function to execute when no reports are found
-    val onNoReports : ()->Unit = {
+    val onNoReports: () -> Unit = {
         coroutineScope.launch {
             Toast.makeText(
                 context,
@@ -94,8 +97,8 @@ fun ShowReportScreen(
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            SearchBar(onSearch = {city->
-                cleanerViewModel.searchReports(city,onNoReports)
+            SearchBar(onSearch = { city ->
+                cleanerViewModel.searchReports(city, onNoReports)
             })
 
             ListScreen(
@@ -103,7 +106,7 @@ fun ShowReportScreen(
                 listItems = listItems,
                 {},
                 isSpotter = false,
-                resolveReport = {reportId->
+                resolveReport = { reportId ->
                     resolveReport(reportId)
                 }
             )
@@ -123,27 +126,31 @@ fun SearchBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        BasicTextField(
+        TextField(
             value = searchText,
             onValueChange = { newValue ->
                 searchText = newValue
             },
+            placeholder = {
+                Text(text = "Search here...")
+            },
             singleLine = true,
-            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onPrimaryContainer),
+            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.tertiary),
             modifier = Modifier
+                .height(52.dp)
                 .weight(1f)
                 .padding(end = 8.dp)
                 .background(MaterialTheme.colorScheme.primaryContainer)
         )
 
-        Button(
-            onClick = {
+
+        SearchButtonComponent(
+            value = "Search",
+            onButtonClicked = {
                 onSearch(searchText)
             },
-
-        ) {
-            Text(text = "Search")
-        }
+            painterResource = painterResource(id = R.drawable.ic_search)
+        )
     }
 
 }
