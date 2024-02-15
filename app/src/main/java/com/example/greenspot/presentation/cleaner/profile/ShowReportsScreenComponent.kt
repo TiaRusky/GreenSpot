@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -25,7 +26,7 @@ fun SearchButtonComponent(
 ){
     Button(
         modifier = Modifier
-            .fillMaxWidth()
+            .width(120.dp)
             .heightIn(48.dp),
         onClick = {
             onButtonClicked.invoke()
@@ -40,12 +41,12 @@ fun SearchButtonComponent(
             contentDescription = "",
             tint = Color.Unspecified
         )
-        Text(
+        /*Text(
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.background,
             fontStyle = FontStyle.Normal,
             text = value
-        )
+        )*/
     }
 
 }
