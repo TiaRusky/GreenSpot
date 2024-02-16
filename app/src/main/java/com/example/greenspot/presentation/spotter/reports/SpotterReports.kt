@@ -2,8 +2,10 @@ package com.example.greenspot.presentation.spotter.reports
 
 
 import android.content.Context
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -43,8 +45,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -110,6 +114,8 @@ fun ListItem(
     isSpotter: Boolean,
     resolveReport : (String)->Unit,
 ) {
+    val context = LocalContext.current
+
     val isChecked = listItemData.validated
     val borderColor = if (isChecked) MaterialTheme.colorScheme.primary else Color.Gray
 
@@ -222,6 +228,22 @@ fun ListItem(
                         modifier = Modifier.align(Alignment.CenterVertically)
                     ) {
                         Text(text = "Resolve")
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    //The button open maps to allow the cleaner to reach a report
+                    Button(onClick = {
+                        val geoPoint = listItemData.location
+                        val latitude = geoPoint.latitude
+                        val longitude = geoPoint.longitude
+
+                        val uri = "geo:$latitude,$longitude?q=$latitude,$longitude(Report Location)"
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                        intent.setPackage("com.google.android.apps.maps")
+                        startActivity(context, intent, null)
+                    }) {
+                        Text("Open Maps")
                     }
                 }
             }
