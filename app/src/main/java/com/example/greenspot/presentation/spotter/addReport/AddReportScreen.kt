@@ -153,7 +153,7 @@ fun AddReport(
                     cameraLauncher.launch(uri)              //Get the pic
                     getLocation(context){location->            //Get the current location
                         val geoPoint = GeoPoint(location.latitude, location.longitude)
-                        getProvinceFromGeoPoint(context, geoPoint , onProvinceReceived) {}       //Get the city
+                        getProvinceFromGeoPoint(context, geoPoint , onProvinceReceived,{})        //Get the city
                         capturedLocation = location
                     }
 
