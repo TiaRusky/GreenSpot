@@ -13,6 +13,7 @@ enum class GreenspotScreen(){
     SignUpCleaner,
     CleanerProfile,
     SpotterProfile,
+    Loading,
 }
 
 const val ROOT = "root_graph"         //Identify the root navgraph (Main graph)
