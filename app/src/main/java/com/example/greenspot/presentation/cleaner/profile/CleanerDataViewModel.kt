@@ -27,8 +27,16 @@ class CleanerDataViewModel : ViewModel() {
     private val _listItems = MutableStateFlow(emptyList<ListItemData>())
     val listItems: StateFlow<List<ListItemData>> = _listItems.asStateFlow()
 
+    private val _resolvedItems = MutableStateFlow(emptyList<ListItemData>())
+    val resolvedItems = _resolvedItems.asStateFlow()
+
+
     init {
         updateCleanerData()
+        viewModelScope.launch(Dispatchers.IO) {
+            val newItems = getResolvedReports()
+            _resolvedItems.value += newItems.reversed()
+        }
     }
 
     private fun updateCleanerData() {
@@ -50,30 +58,75 @@ class CleanerDataViewModel : ViewModel() {
         }
     }
 
-    fun searchReports(city: String,onNoReports:()->Unit) {
+    //Load the reports resolved by the current Cleaner
+    private suspend fun getResolvedReports(): MutableList<ListItemData> {
+
+        val newItems: MutableList<ListItemData> = mutableListOf()
+
+        val db = Firebase.firestore
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+        val fieldName = "resolvedById"
+
+        var query = db.collection("reports")
+            .orderBy("date")
+            .whereEqualTo(fieldName, userId) //Loads the reports made by the current user
+
+        val documents = query.get().await()
+
+        for (document in documents) {
+            val data = document.data
+
+            val report = ListItemData(
+                id = document.id,
+                date = data["date"] as Timestamp,
+                validated = data["resolved"].toString().toBoolean(),
+                location = data["position"] as GeoPoint,
+                imageUrl = data["imageURL"].toString(),
+                votes = (data["votes"].toString()).toInt(),
+                city = data["city"].toString(),
+                region = data["region"].toString(),
+                description = data["description"].toString(),
+                resolvedByName = data["resolvedByName"]?.toString()
+                    ?: null     //If it is not resolved
+            )
+
+            newItems += report
+        }
+        return newItems
+
+    }
+
+
+    fun searchReports(city: String, onNoReports: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             _listItems.value = emptyList<ListItemData>()
-            val newItems = getReportsFromCity(city,onNoReports)
+            val newItems = getReportsFromCity(city, onNoReports)
             _listItems.value = newItems
         }
     }
 
     //This function is used to loads the reports in one city
-    private suspend fun getReportsFromCity(city: String,onNoReports: () -> Unit): List<ListItemData> {
+    private suspend fun getReportsFromCity(
+        city: String,
+        onNoReports: () -> Unit
+    ): List<ListItemData> {
         val newItems: MutableList<ListItemData> = mutableListOf()
         val db = Firebase.firestore
         val fieldName = "city"
         val capitalizedCity = capitalizeWords(city)
         var query = db.collection("reports")
             .orderBy("votes")
-            .whereEqualTo(fieldName, capitalizedCity)              //Loads the reports made by the current user
-            .whereEqualTo("resolved",false)             //Not load the resolved reports
+            .whereEqualTo(
+                fieldName,
+                capitalizedCity
+            )              //Loads the reports made by the current user
+            .whereEqualTo("resolved", false)             //Not load the resolved reports
 
         val documents = query.get().await()
 
-        if(documents.isEmpty) {
+        if (documents.isEmpty) {
             onNoReports()
-            Log.i("cleaner","No reports found for city $city")
+            Log.i("cleaner", "No reports found for city $city")
         }
 
         for (document in documents) {
@@ -89,7 +142,8 @@ class CleanerDataViewModel : ViewModel() {
                 city = data["city"].toString(),
                 region = data["region"].toString(),
                 description = data["description"].toString(),
-                resolvedByName = data["resolvedByName"]?.toString() ?: null     //If it is not resolved
+                resolvedByName = data["resolvedByName"]?.toString()
+                    ?: null     //If it is not resolved
             )
 
             newItems += report
@@ -105,32 +159,35 @@ class CleanerDataViewModel : ViewModel() {
 
 
     //The function used to "clear" a spotter's report
-    fun resolveReport(reportId: String,onValidated:()->Unit) {
+    fun resolveReport(reportId: String, onValidated: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-            resolve(reportId,onValidated)
+            resolve(reportId, onValidated)
         }
     }
 
-    private suspend fun resolve(reportId: String,onValidated:()->Unit){
+    private suspend fun resolve(reportId: String, onValidated: () -> Unit) {
         val db = Firebase.firestore
         val reportReference = db.collection("reports").document(reportId)       //Access the report
 
         //Set the new data for the report
         val updates = hashMapOf(
             "resolved" to true,
-            "resolvedById" to  uiState.value.userId,
+            "resolvedById" to uiState.value.userId,
             "resolvedByName" to uiState.value.username,
         ).toMap()
 
         reportReference
             .update(updates)
             .addOnSuccessListener {
-                _listItems.value = removeItemById(listItems.value,reportId)         //Remove the report from the UI
+                _listItems.value = removeItemById(
+                    listItems.value,
+                    reportId
+                )         //Remove the report from the UI
                 onValidated()
-                Log.i("cleaner","report $reportId updated successfully.")
+                Log.i("cleaner", "report $reportId updated successfully.")
             }
             .addOnFailureListener { e ->
-                Log.e("cleaner","Error updating report: $e")
+                Log.e("cleaner", "Error updating report: $e")
             }
 
     }

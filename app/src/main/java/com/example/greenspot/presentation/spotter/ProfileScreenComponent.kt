@@ -54,7 +54,7 @@ fun HeadTextComponent(value: String){
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
         ),
-        color = MaterialTheme.colorScheme.primary, //colorText
+        color = MaterialTheme.colorScheme.tertiary, //colorText
         textAlign = TextAlign.Center
     )
 }

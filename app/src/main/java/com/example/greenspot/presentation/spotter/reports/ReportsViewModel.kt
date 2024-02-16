@@ -8,6 +8,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,8 +68,8 @@ class ReportsViewModel : ViewModel() {
         val fieldName = "spotterId"
 
         var query = db.collection("reports")
-            .orderBy("date")
-            .whereEqualTo(fieldName, userId) //Loads the reports made by the current user
+            .orderBy("date", Query.Direction.DESCENDING)                //Loads first the most recent ones
+            .whereEqualTo(fieldName, userId)                                //Loads the reports made by the current user
             .limit(10)
 
         // If there's a last visible item, start after it       -> loads only the document not already loaded

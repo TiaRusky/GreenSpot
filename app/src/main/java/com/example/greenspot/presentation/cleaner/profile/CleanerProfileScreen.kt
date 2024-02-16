@@ -2,6 +2,7 @@ package com.example.greenspot.presentation.cleaner.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +38,8 @@ import com.example.greenspot.R
 import com.example.greenspot.navgraph.LoggedCleanerScreens
 import com.example.greenspot.presentation.cleaner.sign.CleanerData
 import com.example.greenspot.presentation.common.GreenspotBottomBar
+import com.example.greenspot.presentation.spotter.HeadTextComponent
+import com.example.greenspot.presentation.spotter.reports.ListScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,8 +48,10 @@ fun CleanerProfileScreen(
     navController: NavHostController,
     onSignOut: () -> Unit,
     cleanerDataViewModel: CleanerDataViewModel = viewModel()
-    ) {
+) {
+    //Loads the data of the cleaner and the resolved reports
     val cleanerDataUiState by cleanerDataViewModel.uiState.collectAsState()
+    val resolvedReports by cleanerDataViewModel.resolvedItems.collectAsState()
 
     Scaffold(
         bottomBar = {
@@ -61,16 +66,25 @@ fun CleanerProfileScreen(
         modifier = Modifier
             .fillMaxSize()
     ) { innerPadding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            item {
-                SpotterProfileInfos(
-                    cleanerDataUiState
-                )
-            }
+            SpotterProfileInfos(
+                cleanerDataUiState
+            )
+
+            //HeadTextComponent(value = "Resolved")
+
+            ListScreen(
+                modifier = Modifier.padding(innerPadding),
+                listItems = resolvedReports,
+                {},
+                isSpotter = true,
+                resolveReport = {}
+            )
+
         }
     }
 }
@@ -96,9 +110,7 @@ fun SpotterProfileInfos(
                     .clip(CircleShape),
                 contentScale = ContentScale.Crop
             )
-        }
-
-        else{   //Print a standard image if no one is found in the account
+        } else {   //Print a standard image if no one is found in the account
             Image(
                 painter = painterResource(id = R.drawable.no_image_user),
                 contentDescription = "Profile Picture",
@@ -125,12 +137,12 @@ fun SpotterProfileInfos(
 
 //Where will be inserted the info about the profile's activities in the app
 @Composable
-fun SpotterProfileData(){
+fun SpotterProfileData() {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
         //modifier = Modifier.fillMaxHeight(),
-    ){
+    ) {
         item {
             Text(text = "AAAAAAAAAAA")
         }
@@ -145,13 +157,13 @@ fun SpotterProfileScreenPreview() {
         navController = rememberNavController(),
         onSignOut = {},
 
-    )
+        )
 }
 
 
 @Preview
 @Composable
-fun SpotterProfileInfosPreview(){
+fun SpotterProfileInfosPreview() {
     SpotterProfileInfos(
         cleanerData = CleanerData(
             userId = "1",

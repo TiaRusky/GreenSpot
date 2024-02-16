@@ -86,7 +86,8 @@ fun SpotterProfileScreen(
             SpotterProfileData(
                 navController = navController,
                 made = spotterReportsUiState.reportsMade,
-                resolved = spotterReportsUiState.resolvedReports
+                resolved = spotterReportsUiState.resolvedReports,
+                token = spotterReportsUiState.resolvedReports*10
             )
 
         }
@@ -142,7 +143,7 @@ fun SpotterProfileInfos(
 
 //Where will be inserted the info about the profile's activities in the app
 @Composable
-fun SpotterProfileData(navController: NavHostController,made:Int,resolved:Int){
+fun SpotterProfileData(navController: NavHostController,made:Int,resolved:Int,token:Int){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -165,7 +166,7 @@ fun SpotterProfileData(navController: NavHostController,made:Int,resolved:Int){
 
                 //HeadTextComponent(value = "Activity Recap")
 
-                GridItem(text = "Token", number = 0, painterResource = painterResource(id = R.drawable.token))
+                GridItem(text = "Token", number = token, painterResource = painterResource(id = R.drawable.token))
                 Spacer(
                     modifier = Modifier
                         .height(10.dp)
@@ -262,5 +263,5 @@ fun SpotterProfileInfosPreview(){
 @Preview
 @Composable
 fun SpotterProfileDataPreview(){
-    SpotterProfileData(navController = rememberNavController(),0,0)
+    SpotterProfileData(navController = rememberNavController(),0,0,0)
 }
