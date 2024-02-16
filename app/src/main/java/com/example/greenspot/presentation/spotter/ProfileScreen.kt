@@ -100,7 +100,7 @@ fun SpotterProfileInfos(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
             .padding(12.dp)
     ) {
         if (userData?.profilePictureUrl != null) {
@@ -127,6 +127,7 @@ fun SpotterProfileInfos(
 
         if (userData?.username != null) {
             Text(
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 text = userData.username,
                 textAlign = TextAlign.Center,
                 fontSize = 26.sp,
@@ -162,14 +163,14 @@ fun SpotterProfileData(navController: NavHostController,made:Int,resolved:Int){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                HeadTextComponent(value = "Activity Recap")
+                //HeadTextComponent(value = "Activity Recap")
 
                 GridItem(text = "Token", number = 0, painterResource = painterResource(id = R.drawable.token))
                 Spacer(
                     modifier = Modifier
                         .height(10.dp)
                 )
-                GridItem(text = "Reports made", number = made, painterResource = painterResource(id = R.drawable.ic_reports_made))
+                GridItem(text = "Reports ", number = made, painterResource = painterResource(id = R.drawable.ic_reports_made))
                 Spacer(
                     modifier = Modifier
                         .height(10.dp)
