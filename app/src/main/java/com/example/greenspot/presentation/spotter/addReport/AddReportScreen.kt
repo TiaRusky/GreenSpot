@@ -103,7 +103,11 @@ fun AddReport(
         if (cameraPermissionGranted && locationPermissionGranted) {
             Log.i("Permission", "Granted")
             cameraLauncher.launch(uri)                  //Start the camera if the user gave the permissions
-            getLocation(context,{})
+            getLocation(context){location->            //Get the current location
+                val geoPoint = GeoPoint(location.latitude, location.longitude)
+                getProvinceFromGeoPoint(context, geoPoint , onProvinceReceived) {}       //Get the city
+                capturedLocation = location
+            }
 
         } else {
             Log.i("Permission", "Denied")

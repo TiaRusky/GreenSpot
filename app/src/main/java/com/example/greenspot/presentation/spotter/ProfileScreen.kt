@@ -71,11 +71,13 @@ fun SpotterProfileScreen(
 
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         ) {
             SpotterProfileInfos(
                 userData = userData
@@ -140,7 +142,6 @@ fun SpotterProfileInfos(
 //Where will be inserted the info about the profile's activities in the app
 @Composable
 fun SpotterProfileData(navController: NavHostController,made:Int,resolved:Int){
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -151,12 +152,13 @@ fun SpotterProfileData(navController: NavHostController,made:Int,resolved:Int){
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(28.dp)
+                .padding(10.dp)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState())
+                    .background(MaterialTheme.colorScheme.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 

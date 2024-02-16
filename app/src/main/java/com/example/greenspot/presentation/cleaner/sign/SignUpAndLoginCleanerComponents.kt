@@ -16,13 +16,14 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -101,11 +102,7 @@ fun MyTextFieldComponent(labelValue: String,
             .fillMaxWidth()
             .clip(RoundedCornerShape(4.dp)),
         label = { Text(text = labelValue) },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color(0xFF92A3FD),
-            focusedLabelColor = Color(0xFF92A3FD),
-            cursorColor = Color(0xFF92A3FD)
-        ),
+
         keyboardOptions = KeyboardOptions.Default,
         value = textValue.value,
         onValueChange = { //used when user insert a name in the field
@@ -139,11 +136,6 @@ fun PasswordTextFieldComponent(labelValue: String,
             .fillMaxWidth()
             .clip(RoundedCornerShape(4.dp)),
         label = { Text(text = labelValue) },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color(0xFF92A3FD),
-            focusedLabelColor = Color(0xFF92A3FD),
-            cursorColor = Color(0xFF92A3FD)
-        ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         value = password.value,
         onValueChange = { //used when the value change
@@ -208,7 +200,7 @@ fun ButtonComponent(value: String,
                 .fillMaxWidth()
                 .heightIn(48.dp)
                 .background(
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     shape = RoundedCornerShape(50.dp)
                 ),
             contentAlignment = Alignment.Center
@@ -216,7 +208,7 @@ fun ButtonComponent(value: String,
             Text(
                 text = value,
                 fontSize = 18.sp,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -235,7 +227,7 @@ fun DividerTextComponent() {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            color = Color(0xff7b6f72),
+            color = MaterialTheme.colorScheme.secondary,
             thickness = 1.dp
         )
         Text(
@@ -243,13 +235,13 @@ fun DividerTextComponent() {
                 .padding(8.dp),
             text = "Or",
             fontSize = 18.sp,
-            color = Color(0xFF1D1617)
+            color = MaterialTheme.colorScheme.secondary
         )
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            color = Color(0xff7b6f72),
+            color = MaterialTheme.colorScheme.secondary,
             thickness = 1.dp
         )
     }
@@ -270,7 +262,7 @@ fun ClickableLoginTextComponent(tryToLogin:Boolean = true, onTextSelected: () ->
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(androidx.compose.material3.MaterialTheme.colorScheme.primary)) {
+        withStyle(style = SpanStyle(MaterialTheme.colorScheme.tertiary)) {
             pushStringAnnotation(tag = loginText, annotation = loginText)
             append(loginText)
         }
@@ -283,7 +275,8 @@ fun ClickableLoginTextComponent(tryToLogin:Boolean = true, onTextSelected: () ->
             fontSize = 21.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.tertiary
         ),
         text = annotatedString,
         onClick = {
@@ -304,7 +297,7 @@ fun UnderLinedTextComponent(value: String) {
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
         ),
-        color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+        color = MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center,
         textDecoration = TextDecoration.Underline
     )

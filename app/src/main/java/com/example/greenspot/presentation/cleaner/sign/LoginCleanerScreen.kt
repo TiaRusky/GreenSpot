@@ -12,15 +12,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.R
 import com.example.greenspot.navgraph.GreenspotScreen
 
@@ -32,18 +36,20 @@ fun LoginCleanerScreen(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Surface (
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(28.dp)
         ){
             Column(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Box(
@@ -88,15 +94,15 @@ fun LoginCleanerScreen(
 
                 Spacer(
                     modifier = Modifier
-                        .height(10.dp)
+                        .height(15.dp)
                 )
 
-                UnderLinedTextComponent(value = "Forgot your password")
+                //UnderLinedTextComponent(value = "Forgot your password")
 
-                Spacer(
+                /*Spacer(
                     modifier = Modifier
                         .height(20.dp)
-                )
+                )*/
 
                 //login button
                 ButtonComponent(
@@ -112,7 +118,7 @@ fun LoginCleanerScreen(
                 ClickableLoginTextComponent(tryToLogin = false, onTextSelected = {
                     navController.navigate(GreenspotScreen.SignUpCleaner.name){
                         //Remove the login screen to move to the registration screen
-                        popUpTo(navController.graph.findStartDestination().id)
+                        //popUpTo(navController.graph.findStartDestination().id)
                     }
                 })
             }
@@ -126,10 +132,12 @@ fun LoginCleanerScreen(
 
 }
 
-/*@Preview
+@Preview
 @Composable
 fun DefaultPreviewOfLoginCleanerScreen(){
     LoginCleanerScreen(
-        navController = rememberNavController()
+        navController = rememberNavController(),
+        applicationContext = LocalContext.current,
+
     )
-}*/
+}
