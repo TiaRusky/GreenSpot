@@ -1,19 +1,25 @@
 package com.example.greenspot.presentation.spotter.addReport
 
+
 import android.location.Location
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.HttpClient
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 class AddReportViewModel : ViewModel() {
 
@@ -61,12 +67,19 @@ class AddReportViewModel : ViewModel() {
             .addOnSuccessListener {
                 Log.i("addReport","Report loaded on firestore with success!")
                 onSuccess()
+
+                //update votes using python anywhere
+                val url = URL("https://ilcameriere.pythonanywhere.com/api/data?id=${it.id}&lat=${location.latitude}&log=${location.longitude}")
+
+                with(url.openConnection() as HttpURLConnection) {
+                    requestMethod = "GET"
+                }
+
             }
             .addOnFailureListener { e ->
                 Log.e("addReport","Failed firestore loading: $e")
                 onFail()
             }
     }
-
 
 }
