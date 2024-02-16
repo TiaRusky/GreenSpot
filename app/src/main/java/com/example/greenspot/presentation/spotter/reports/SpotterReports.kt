@@ -7,6 +7,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -40,6 +41,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -115,6 +117,9 @@ fun ListItem(
     resolveReport : (String)->Unit,
 ) {
     val context = LocalContext.current
+    val packageManager = LocalContext.current.packageManager            //Needed to verify if google maps is installed
+    val coroutineScope = rememberCoroutineScope()
+
 
     val isChecked = listItemData.validated
     val borderColor = if (isChecked) MaterialTheme.colorScheme.primary else Color.Gray
@@ -241,7 +246,22 @@ fun ListItem(
                         val uri = "geo:$latitude,$longitude?q=$latitude,$longitude(Report Location)"
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                         intent.setPackage("com.google.android.apps.maps")
-                        startActivity(context, intent, null)
+
+                        //Checks if the Google Maps is installed
+                        if (intent.resolveActivity(packageManager) != null) {
+                            startActivity(context, intent, null)
+                        }
+
+                        else{
+                            coroutineScope.launch {
+                                Toast.makeText(
+                                    context,
+                                    "Install Google Maps",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+
                     }) {
                         Text("Open Maps")
                     }
