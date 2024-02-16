@@ -1,7 +1,10 @@
 package com.example.greenspot.presentation.spotter.addReport
 
+import android.content.ContentValues
+import android.content.Context
 import android.location.Location
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -14,6 +17,7 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.OutputStream
 
 class AddReportViewModel : ViewModel() {
 
@@ -67,6 +71,7 @@ class AddReportViewModel : ViewModel() {
                 onFail()
             }
     }
+
 
 
 }
