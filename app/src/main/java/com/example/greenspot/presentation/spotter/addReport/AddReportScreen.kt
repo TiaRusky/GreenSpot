@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,15 +64,15 @@ fun AddReport(
 
 
     /********The data to store**********/
-    var reportDescription = remember {           //used to remember the last value inserted in the field
+    var reportDescription = rememberSaveable {           //used to remember the last value inserted in the field
         mutableStateOf("")
     }
 
-    var capturedImageUri by remember {
+    var capturedImageUri by rememberSaveable {
         mutableStateOf<Uri>(Uri.EMPTY)
     }
 
-    var capturedLocation by remember{
+    var capturedLocation by rememberSaveable{
         mutableStateOf<Location>(Location(""))
     }
 
@@ -80,7 +81,7 @@ fun AddReport(
             capturedImageUri = uri
         }
 
-    var geoAddress by remember { mutableStateOf(createDummyAddress()) }     //here will be stored info about the location
+    var geoAddress by rememberSaveable { mutableStateOf(createDummyAddress()) }     //here will be stored info about the location
 
     val onProvinceReceived: (Address) -> Unit = { result ->
         geoAddress = result

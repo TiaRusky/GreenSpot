@@ -123,6 +123,7 @@ fun SpotterProfileInfos(
 
         if (companyName != null) {
             Text(
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 text = companyName,
                 textAlign = TextAlign.Center,
                 fontSize = 26.sp,

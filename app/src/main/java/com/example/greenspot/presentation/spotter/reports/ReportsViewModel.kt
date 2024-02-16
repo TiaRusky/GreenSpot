@@ -70,7 +70,7 @@ class ReportsViewModel : ViewModel() {
         var query = db.collection("reports")
             .orderBy("date", Query.Direction.DESCENDING)                //Loads first the most recent ones
             .whereEqualTo(fieldName, userId)                                //Loads the reports made by the current user
-            .limit(10)
+            //.limit(10)
 
         // If there's a last visible item, start after it       -> loads only the document not already loaded
         lastVisibleItem?.let { lastVisibleItem ->

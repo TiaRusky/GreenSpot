@@ -107,6 +107,8 @@ fun SpotterReports(
             resolveReport = {}      //Only needed by the cleaner
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
     }
 }
 
@@ -299,10 +301,13 @@ fun ListScreen(
             )
 
             Divider() // Aggiungi una linea divisoria tra gli elementi della lista
-
+            Spacer(modifier = Modifier.height(4.dp))
             if (listItem == listItems.lastOrNull()) {
                 onLoadMoreItems()
             }
+        }
+        item{
+            Text(text = "")
         }
     }
 }
