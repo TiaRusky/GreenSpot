@@ -7,7 +7,6 @@ import android.location.Address
 import android.location.Location
 import android.net.Uri
 import android.util.Log
-
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,8 +42,6 @@ import com.example.greenspot.presentation.spotter.reports.createDummyAddress
 import com.example.greenspot.presentation.spotter.reports.getProvinceFromGeoPoint
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.firestore.GeoPoint
-import kotlinx.coroutines.launch
-
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
