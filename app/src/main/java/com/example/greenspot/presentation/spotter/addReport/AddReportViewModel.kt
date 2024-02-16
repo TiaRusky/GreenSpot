@@ -69,6 +69,20 @@ class AddReportViewModel : ViewModel() {
 
                 with(url.openConnection() as HttpURLConnection) {
                     requestMethod = "GET"
+
+                    // Leggi la risposta
+                    BufferedReader(InputStreamReader(inputStream)).use {
+                        val response = StringBuffer()
+
+                        var inputLine = it.readLine()
+                        while (inputLine != null) {
+                            response.append(inputLine)
+                            inputLine = it.readLine()
+                        }
+
+                        // Stampa la risposta
+                        println(response.toString())
+                    }
                 }
 
                 onSuccess()
