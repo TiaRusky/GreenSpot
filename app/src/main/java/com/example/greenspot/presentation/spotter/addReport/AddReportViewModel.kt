@@ -4,6 +4,7 @@ package com.example.greenspot.presentation.spotter.addReport
 import android.location.Location
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
@@ -22,6 +23,8 @@ import java.net.URL
 
 class AddReportViewModel : ViewModel() {
 
+    var uploadPhotoProgress = mutableStateOf(false) //used to see the circular progress bar
+
     //This function save the image on firebase storage and then save the report in firestore
     fun sendReport(imageUri: Uri, location: Location,description:String,city:String,region:String,onSuccess:()->Unit, onFail:()->Unit) {
 
@@ -29,6 +32,8 @@ class AddReportViewModel : ViewModel() {
             val storage = Firebase.storage
             val storageRef = storage.reference
             val imageRef = storageRef.child("images/" + imageUri.lastPathSegment)   //Gets only the filename of the image
+
+            uploadPhotoProgress.value = true
 
             val uploadTask = imageRef.putFile(imageUri)
 

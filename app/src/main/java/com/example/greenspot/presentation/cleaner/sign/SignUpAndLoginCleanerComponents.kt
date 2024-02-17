@@ -262,7 +262,7 @@ fun ClickableLoginTextComponent(tryToLogin:Boolean = true, onTextSelected: () ->
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(MaterialTheme.colorScheme.tertiary)) {
+        withStyle(style = SpanStyle(MaterialTheme.colorScheme.primary)) {
             pushStringAnnotation(tag = loginText, annotation = loginText)
             append(loginText)
         }
