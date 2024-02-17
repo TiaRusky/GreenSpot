@@ -243,7 +243,7 @@ fun getLocation(context: Context,  callback: (Location) -> Unit) {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 if (location != null) {
-                     callback(location)
+                    callback(location)
                 }
             }
             .addOnFailureListener { e ->

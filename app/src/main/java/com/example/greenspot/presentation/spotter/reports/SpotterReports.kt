@@ -3,6 +3,7 @@ package com.example.greenspot.presentation.spotter.reports
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
@@ -12,6 +13,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -27,6 +29,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -37,11 +40,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,9 +64,11 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.greenspot.navgraph.LoggedSpotterScreens
 import com.example.greenspot.presentation.common.GreenspotBottomBar
 import com.google.firebase.firestore.GeoPoint
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.Calendar
 import java.util.Locale
@@ -138,6 +147,8 @@ fun ListItem(
     val month = calendar.get(Calendar.MONTH) + 1    //Months start from 0
     val year = calendar.get(Calendar.YEAR)
 
+    val imageLoaded = rememberSaveable { mutableStateOf(false) }
+
 
     Column(
         modifier = Modifier
@@ -177,16 +188,38 @@ fun ListItem(
         // Divider
         Divider()
 
+
+
         // Contenuto espandibile
         if (expanded.value) {
-            Image(
-                painter = rememberAsyncImagePainter(listItemData.imageUrl),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentScale = ContentScale.Crop
-            )
+            //Loads the image
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    loadAndCacheImage(listItemData.imageUrl, imageLoaded)
+                }
+            }
+
+            if(imageLoaded.value){
+                Image(
+                    painter = rememberAsyncImagePainter(listItemData.imageUrl),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            else{   //The image is still loading
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(50.dp),
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            }
 
             // GeoPoint
             Row {
@@ -361,4 +394,21 @@ fun createDummyAddress(): Address {
     address.countryName = "Dummy Country"
     // Aggiungi altri campi di Address se necessario
     return address
+}
+
+//Used to load the images in a asyn way
+suspend fun loadAndCacheImage(imageUrl: String, imageLoaded: MutableState<Boolean>) {
+    withContext(Dispatchers.IO) {
+        try {
+            val picasso = Picasso.get()
+            val bitmap: Bitmap = picasso.load(imageUrl)
+                .config(Bitmap.Config.RGB_565)
+                .resize(400,400)
+                .onlyScaleDown()
+                .get() // Carica l'immagine in modo asincrono
+            imageLoaded.value = true
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }

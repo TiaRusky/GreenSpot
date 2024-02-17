@@ -125,4 +125,8 @@ dependencies {
     //Position dependency
     implementation("com.google.android.gms:play-services-location:18.0.0")
 
+    //Needed for the image asy management
+    implementation("com.squareup.picasso:picasso:2.8")
+
+
 }
