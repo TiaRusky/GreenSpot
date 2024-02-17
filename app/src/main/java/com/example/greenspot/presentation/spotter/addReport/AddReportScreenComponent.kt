@@ -80,9 +80,11 @@ fun CaptionComponent(
 fun InsertPhotoButtonComponent(
     value: String,
     onButtonClicked: () -> Unit,
-    painterResource: Painter
+    painterResource: Painter,
+    enabled : Boolean,
 ) {
     Button(
+        enabled = enabled,  //Only to enable if the GPS is on
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp),

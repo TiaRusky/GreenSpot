@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -13,13 +14,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,10 +35,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -43,6 +51,7 @@ import com.example.greenspot.presentation.spotter.reports.createDummyAddress
 import com.example.greenspot.presentation.spotter.reports.getProvinceFromGeoPoint
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.firestore.GeoPoint
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -52,10 +61,18 @@ import java.util.Objects
 @Composable
 fun AddReport(
     navController: NavHostController,
-    addReportViewModel : AddReportViewModel = viewModel()
+    addReportViewModel: AddReportViewModel = viewModel()
 ) {
 
     val context = LocalContext.current
+
+    //The report cannot be implemented if the gps is off
+    var gpsEnabled = rememberSaveable {
+        isGpsEnabled(context)
+    }
+
+    Log.i("AddReport", "GPSenabled: $gpsEnabled")
+
     val file = context.createImageFile()                //The file that will contain the image
     val uri = FileProvider.getUriForFile(               //The URI of the image
         Objects.requireNonNull(context),
@@ -64,15 +81,16 @@ fun AddReport(
 
 
     /********The data to store**********/
-    var reportDescription = rememberSaveable {           //used to remember the last value inserted in the field
-        mutableStateOf("")
-    }
+    var reportDescription =
+        rememberSaveable {           //used to remember the last value inserted in the field
+            mutableStateOf("")
+        }
 
     var capturedImageUri by rememberSaveable {
         mutableStateOf<Uri>(Uri.EMPTY)
     }
 
-    var capturedLocation by rememberSaveable{
+    var capturedLocation by rememberSaveable {
         mutableStateOf<Location>(Location(""))
     }
 
@@ -88,8 +106,6 @@ fun AddReport(
     }
 
 
-
-
     //Here is defined the activity that requests the permissions to use the camera and location
     val permissionsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -101,15 +117,20 @@ fun AddReport(
         if (cameraPermissionGranted && locationPermissionGranted) {
             Log.i("Permission", "Granted")
             cameraLauncher.launch(uri)                  //Start the camera if the user gave the permissions
-            getLocation(context){location->            //Get the current location
+            getLocation(context) { location ->            //Get the current location
                 val geoPoint = GeoPoint(location.latitude, location.longitude)
-                getProvinceFromGeoPoint(context, geoPoint , onProvinceReceived) {}       //Get the city
+                getProvinceFromGeoPoint(
+                    context,
+                    geoPoint,
+                    onProvinceReceived
+                ) {}       //Get the city
                 capturedLocation = location
             }
 
         } else {
             Log.i("Permission", "Denied")
-            Toast.makeText(context, "Permissions Denied", Toast.LENGTH_SHORT).show()     //Show a message when no permission
+            Toast.makeText(context, "Permissions Denied", Toast.LENGTH_SHORT)
+                .show()     //Show a message when no permission
         }
     }
 
@@ -128,11 +149,16 @@ fun AddReport(
 
         AddReportTextComponent("Add a new report")
 
-        CaptionComponent("Add description...",reportDescription.value){newValue->
+        GpsToggle(initialGpsEnabled = gpsEnabled, onGpsToggle = {})
+
+
+
+        CaptionComponent("Add description...", reportDescription.value) { newValue ->
             reportDescription.value = newValue
         }
 
         InsertPhotoButtonComponent(
+            enabled = gpsEnabled,
             value = "Add Image",
             onButtonClicked = {
                 //Checks if there is the oermission to open the camera and access the location
@@ -149,9 +175,13 @@ fun AddReport(
                     && locationPermissionCheckResult == PackageManager.PERMISSION_GRANTED
                 ) {
                     cameraLauncher.launch(uri)              //Get the pic
-                    getLocation(context){location->            //Get the current location
+                    getLocation(context) { location ->            //Get the current location
                         val geoPoint = GeoPoint(location.latitude, location.longitude)
-                        getProvinceFromGeoPoint(context, geoPoint , onProvinceReceived,{})        //Get the city
+                        getProvinceFromGeoPoint(
+                            context,
+                            geoPoint,
+                            onProvinceReceived,
+                            {})        //Get the city
                         capturedLocation = location
                     }
 
@@ -168,7 +198,8 @@ fun AddReport(
         )
 
         //Checks if all the important data are ready to send
-        val sendEnabled = (capturedImageUri != Uri.EMPTY) && (capturedLocation.toString() != "") && (geoAddress.locality != "Dummy City")
+        val sendEnabled =
+            (capturedImageUri != Uri.EMPTY) && (capturedLocation.toString() != "") && (geoAddress.locality != "Dummy City")
         Button(
             modifier = Modifier
                 .fillMaxWidth()
@@ -181,7 +212,7 @@ fun AddReport(
                     city = geoAddress.locality,
                     region = geoAddress.adminArea,
                     onSuccess = {                   //The function to call when the report is loaded correctly
-                        navController.navigate(GreenspotScreen.SpotterProfile.name){
+                        navController.navigate(GreenspotScreen.SpotterProfile.name) {
                             popUpTo(GreenspotScreen.SpotterProfile.name)
                         }
                         Toast.makeText(
@@ -217,6 +248,34 @@ fun AddReport(
     }
 }
 
+//Show if the GPS is on
+@Composable
+fun GpsToggle(
+    initialGpsEnabled: Boolean,
+    onGpsToggle: (Boolean) -> Unit
+) {
+    var gpsEnabled by remember { mutableStateOf(initialGpsEnabled) }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(16.dp)
+    ) {
+        Text(
+            text = "GPS Enabled",
+            color = MaterialTheme.colorScheme.tertiary
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Switch(
+            enabled = false,
+            checked = gpsEnabled,
+            onCheckedChange = { isChecked ->
+                gpsEnabled = isChecked
+                onGpsToggle(isChecked)
+            }
+        )
+    }
+}
+
 /**********UTILITIES*********/
 
 //The function used to create the tmp file that hold the image captured via camera
@@ -233,7 +292,7 @@ fun Context.createImageFile(): File {
 }
 
 //This function retrives the position of the device (lon & lat)
-fun getLocation(context: Context,  callback: (Location) -> Unit) {
+fun getLocation(context: Context, callback: (Location) -> Unit) {
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     if (ContextCompat.checkSelfPermission(
             context,
@@ -247,7 +306,13 @@ fun getLocation(context: Context,  callback: (Location) -> Unit) {
                 }
             }
             .addOnFailureListener { e ->
-                Log.i("location","Error: $e")
+                Log.i("location", "Error: $e")
             }
     }
+}
+
+//Check if the GPS is on
+private fun isGpsEnabled(context: Context): Boolean {
+    val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 }
