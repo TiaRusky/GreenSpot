@@ -175,7 +175,7 @@ fun AddReport(
                 if (cameraPermissionCheckResult == PackageManager.PERMISSION_GRANTED
                     && locationPermissionCheckResult == PackageManager.PERMISSION_GRANTED
                 ) {
-                    cameraLauncher.launch(uri)              //Get the pic
+                    cameraLauncher.launch(uri)                     //Get the pic
                     getLocation(context) { location ->            //Get the current location
                         val geoPoint = GeoPoint(location.latitude, location.longitude)
                         getProvinceFromGeoPoint(
@@ -184,6 +184,7 @@ fun AddReport(
                             onProvinceReceived,
                             {})        //Get the city
                         capturedLocation = location
+                        Log.i("AddReport","Location: ${geoAddress.locality}")
                     }
 
                 } else {        //If no permissions , then ask for them
@@ -263,12 +264,13 @@ fun GpsToggle(
 ) {
     var gpsEnabled by remember { mutableStateOf(initialGpsEnabled) }
 
+    val text = if(gpsEnabled) "GPS Enabled" else "GPS Not Enabled"
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(16.dp)
     ) {
         Text(
-            text = "GPS Enabled",
+            text = text,
             color = MaterialTheme.colorScheme.tertiary
         )
         Spacer(modifier = Modifier.width(16.dp))
