@@ -123,7 +123,7 @@ fun ShakePhoneIconComponent(painterResource: Painter){
             text = "Shake the phone to public a new post",
             textAlign = TextAlign.Center,
             fontSize = 20.sp,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)
         )
     }
 }

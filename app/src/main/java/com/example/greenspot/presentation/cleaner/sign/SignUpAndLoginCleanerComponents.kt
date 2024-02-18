@@ -101,7 +101,12 @@ fun MyTextFieldComponent(labelValue: String,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(4.dp)),
-        label = { Text(text = labelValue) },
+        label = {
+            Text(
+                text = labelValue,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f) //colore del text email
+            )
+                },
 
         keyboardOptions = KeyboardOptions.Default,
         value = textValue.value,
@@ -110,7 +115,11 @@ fun MyTextFieldComponent(labelValue: String,
             onTextChanged(it)
         },
         leadingIcon = { //used to insert the icons
-            Icon(painter = painterResource, contentDescription = "")
+            Icon(
+                painter = painterResource,
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f) //colore icona email
+            )
         },
         isError = !errorStatus //if there is an error in validation, errorStatus is false and isError became true
     )
@@ -135,7 +144,12 @@ fun PasswordTextFieldComponent(labelValue: String,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(4.dp)),
-        label = { Text(text = labelValue) },
+        label = {
+            Text(
+                text = labelValue,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f) //colore del text password
+            )
+                },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         value = password.value,
         onValueChange = { //used when the value change
@@ -143,7 +157,11 @@ fun PasswordTextFieldComponent(labelValue: String,
             onTextSelected(it)
         },
         leadingIcon = { //used to insert the icons
-            Icon(painter = painterResource, contentDescription = "")
+            Icon(
+                painter = painterResource,
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f) //colore icona password
+            )
         },
         trailingIcon = {
             val iconImage = if(passwordVisible.value) {
